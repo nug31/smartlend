@@ -34,15 +34,21 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete 
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 transition-opacity duration-500 ${
+      style={{ backgroundColor: '#E9631A' }}
+      className={`fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-500 ${
         fadeOut ? 'opacity-0' : 'opacity-100'
       }`}
     >
       {/* Animated Background Circles */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl animate-ping-slow"></div>
+        <div
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
+        ></div>
+        <div
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
+        ></div>
       </div>
 
       {/* Main Content */}
@@ -50,55 +56,83 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete 
         {/* Logo with Animation */}
         <div className="relative">
           {/* Outer Ring - Rotating */}
-          <div className="absolute inset-0 w-32 h-32 border-4 border-white/30 rounded-full animate-spin-slow"></div>
-          
+          <div
+            style={{ borderColor: 'rgba(255, 255, 255, 0.4)' }}
+            className="absolute inset-0 w-32 h-32 border-4 rounded-full animate-spin-slow"
+          ></div>
+
           {/* Middle Ring - Counter Rotating */}
-          <div className="absolute inset-2 w-28 h-28 border-4 border-white/20 border-t-white/60 rounded-full animate-spin-reverse"></div>
-          
+          <div
+            style={{
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+              borderTopColor: 'rgba(255, 255, 255, 0.8)'
+            }}
+            className="absolute inset-2 w-28 h-28 border-4 rounded-full animate-spin-reverse"
+          ></div>
+
           {/* Logo Container */}
-          <div className="relative w-32 h-32 bg-white rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform duration-300">
+          <div
+            style={{ backgroundColor: '#FFFFFF' }}
+            className="relative w-32 h-32 rounded-3xl flex items-center justify-center shadow-2xl"
+          >
             {/* Icon with Bounce Animation */}
             <div className="animate-bounce-slow">
-              <Handshake size={64} className="text-orange-600" strokeWidth={2} />
+              <Handshake size={64} style={{ color: '#E9631A' }} strokeWidth={2} />
             </div>
-            
-            {/* Glow Effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-transparent rounded-3xl"></div>
           </div>
 
           {/* Pulse Rings */}
-          <div className="absolute inset-0 w-32 h-32 bg-white/20 rounded-full animate-ping"></div>
+          <div
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
+            className="absolute inset-0 w-32 h-32 rounded-full animate-ping"
+          ></div>
         </div>
 
         {/* Brand Name with Slide Up Animation */}
         <div className="text-center space-y-2 animate-slide-up">
-          <h1 className="text-5xl font-bold text-white drop-shadow-lg tracking-tight">
+          <h1
+            style={{ color: '#FFFFFF' }}
+            className="text-5xl font-bold drop-shadow-lg tracking-tight"
+          >
             SmartLend
           </h1>
-          <p className="text-white/90 text-lg font-medium tracking-wide">
+          <p
+            style={{ color: '#FFFFFF' }}
+            className="text-lg font-medium tracking-wide opacity-90"
+          >
             Asset Management System
           </p>
-          <div className="flex items-center justify-center space-x-2 text-white/70 text-sm">
+          <div
+            style={{ color: '#FFFFFF' }}
+            className="flex items-center justify-center space-x-2 text-sm opacity-80"
+          >
             <span>Developed by</span>
-            <span className="font-bold text-white">NUG</span>
+            <span className="font-bold">NUG</span>
           </div>
         </div>
 
         {/* Progress Bar */}
         <div className="w-64 space-y-2 animate-fade-in">
           {/* Progress Bar Container */}
-          <div className="h-2 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm">
+          <div
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)' }}
+            className="h-2 rounded-full overflow-hidden"
+          >
             <div
-              className="h-full bg-gradient-to-r from-white to-orange-200 rounded-full transition-all duration-300 ease-out shadow-lg"
-              style={{ width: `${progress}%` }}
+              style={{
+                backgroundColor: '#FFFFFF',
+                width: `${progress}%`
+              }}
+              className="h-full rounded-full transition-all duration-300 ease-out shadow-lg"
             >
-              {/* Shimmer Effect */}
-              <div className="h-full w-full bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"></div>
             </div>
           </div>
-          
+
           {/* Progress Text */}
-          <div className="flex justify-between text-white/80 text-xs font-medium">
+          <div
+            style={{ color: '#FFFFFF' }}
+            className="flex justify-between text-xs font-medium opacity-90"
+          >
             <span>Loading...</span>
             <span>{progress}%</span>
           </div>
@@ -106,15 +140,27 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete 
 
         {/* Loading Dots */}
         <div className="flex space-x-2 animate-fade-in">
-          <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-          <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-          <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          <div
+            style={{ backgroundColor: '#FFFFFF' }}
+            className="w-3 h-3 rounded-full animate-bounce"
+          ></div>
+          <div
+            style={{ backgroundColor: '#FFFFFF', animationDelay: '150ms' }}
+            className="w-3 h-3 rounded-full animate-bounce"
+          ></div>
+          <div
+            style={{ backgroundColor: '#FFFFFF', animationDelay: '300ms' }}
+            className="w-3 h-3 rounded-full animate-bounce"
+          ></div>
         </div>
       </div>
 
       {/* Bottom Decoration */}
       <div className="absolute bottom-8 left-0 right-0 flex justify-center">
-        <div className="text-white/50 text-xs animate-pulse">
+        <div
+          style={{ color: '#FFFFFF' }}
+          className="text-xs animate-pulse opacity-60"
+        >
           Preparing your workspace...
         </div>
       </div>
