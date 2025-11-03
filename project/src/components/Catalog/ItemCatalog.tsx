@@ -202,21 +202,32 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
           {/* Request Button - Full Width & Prominent */}
           {item.availableQuantity > 0 ? (
             <button
-              className="w-full px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2 font-bold text-base"
+              style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }}
+              className="w-full px-4 py-3 rounded-lg shadow-md hover:shadow-lg flex items-center justify-center space-x-2 font-bold text-base transition-all duration-200"
               onClick={() => openRequestForm(item)}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#C54A0A'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E9631A'}
             >
               <ShoppingCart size={20} strokeWidth={2.5} />
               <span>Request Item</span>
             </button>
           ) : (
-            <button className="w-full px-4 py-3 bg-gray-400 text-gray-600 rounded-lg cursor-not-allowed flex items-center justify-center space-x-2 font-bold text-base">
+            <button
+              style={{ backgroundColor: '#9CA3AF', color: '#4B5563' }}
+              className="w-full px-4 py-3 rounded-lg cursor-not-allowed flex items-center justify-center space-x-2 font-bold text-base"
+            >
               <Clock size={20} strokeWidth={2.5} />
               <span>Unavailable</span>
             </button>
           )}
 
           {/* Quick View Button - Secondary */}
-          <button className="w-full px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-colors flex items-center justify-center space-x-1 text-sm font-medium">
+          <button
+            style={{ backgroundColor: '#E5E7EB', color: '#1F2937' }}
+            className="w-full px-3 py-2 rounded-lg transition-colors flex items-center justify-center space-x-1 text-sm font-medium"
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#D1D5DB'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E5E7EB'}
+          >
             <Eye size={14} />
             <span>View Details</span>
           </button>
