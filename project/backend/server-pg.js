@@ -54,14 +54,19 @@ app.options('*', (req, res) => {
 // PostgreSQL connection
 const DATABASE_URL = process.env.DATABASE_URL;
 
+console.log('🔍 Environment Check:');
+console.log('PORT:', process.env.PORT || '3002 (default)');
+console.log('NODE_ENV:', process.env.NODE_ENV || 'development');
+console.log('DATABASE_URL:', DATABASE_URL ? 'Set ✅' : 'Not set ❌');
+
 if (!DATABASE_URL) {
   console.error('❌ DATABASE_URL is not set!');
   console.error('Please set DATABASE_URL environment variable in Railway');
+  console.error('Available env vars:', Object.keys(process.env).filter(k => k.includes('DATA') || k.includes('PG')));
   process.exit(1);
 }
 
 console.log('🔗 Connecting to database...');
-console.log('DATABASE_URL:', DATABASE_URL ? 'Set ✅' : 'Not set ❌');
 
 const sequelize = new Sequelize(DATABASE_URL, {
   dialect: 'postgres',
@@ -1305,7 +1310,10 @@ app.post('/api/upload', async (req, res) => {
 async function startServer() {
   try {
     console.log('🔄 Starting PostgreSQL server...');
-    console.log('🔄 DATABASE_URL:', process.env.DATABASE_URL ? 'Set' : 'Not set');
+    console.log('🔄 PORT:', PORT);
+    console.log('🔄 DATABASE_URL:', process.env.DATABASE_URL ? 'Set ✅' : 'Not set ❌');
+
+    console.log('🔗 Attempting database connection...');
     await sequelize.authenticate();
     console.log('✅ PostgreSQL connected successfully');
     
