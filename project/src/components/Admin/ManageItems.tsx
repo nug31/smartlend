@@ -473,16 +473,16 @@ export const ManageItems: React.FC = () => {
               >
                 Delete
               </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Import Modal */}
-      <ImportItemsModal 
-        isOpen={showImportModal} 
-        onClose={() => setShowImportModal(false)} 
+      <ImportItemsModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
       />
-      )}
     </div>
   );
 };
