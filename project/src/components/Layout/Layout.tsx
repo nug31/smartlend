@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
+import { BottomNav } from './BottomNav';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -42,9 +43,15 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange
           isMenuOpen={isSidebarOpen}
         />
 
-        <main className="flex-1 overflow-x-hidden overflow-y-auto">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto pb-20 lg:pb-0">
           {children}
         </main>
+
+        {/* Bottom Navigation for Mobile */}
+        <BottomNav
+          activeTab={activeTab}
+          onTabChange={onTabChange}
+        />
       </div>
     </div>
   );
