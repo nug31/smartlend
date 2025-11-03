@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  /* Custom solid color backgrounds using the three-color palette */
+  .gradient-bg-primary {
+    background: #E9631A; /* Orange */
+  }
+
+  .gradient-bg-secondary {
+    background: #315762; /* Dark Slate */
+  }
+
+  .gradient-bg-success {
+    background: #315762; /* Dark Slate */
+  }
+
+  .gradient-bg-warning {
+    background: #E9631A; /* Orange */
+  }
+
+  .gradient-bg-danger {
+    background: #315762; /* Dark Slate */
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  /* Animated gradient text using three-color palette */
+  .gradient-text {
+    background: linear-gradient(-45deg, #E9631A, #315762, #EFEFEF, #E9631A);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient 15s ease infinite;
+  }
+
+  /* Floating animation */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Pulse animation */
+  .pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Custom shadows using three-color palette */
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(233, 99, 26, 0.4); /* Orange */
+  }
+
+  .shadow-glow-green {
+    box-shadow: 0 0 20px rgba(49, 87, 98, 0.4); /* Dark Slate */
+  }
+
+  .shadow-glow-red {
+    box-shadow: 0 0 20px rgba(233, 99, 26, 0.4); /* Orange */
+  }
+
+  .shadow-glow-yellow {
+    box-shadow: 0 0 20px rgba(233, 99, 26, 0.4); /* Orange */
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Button animations using three-color palette */
+  .btn-primary {
+    @apply bg-orange hover:bg-orange-dark text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply bg-dark-slate hover:bg-dark-slate-dark text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg;
+  }
+
+  .btn-success {
+    @apply bg-dark-slate hover:bg-dark-slate-dark text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-danger {
+    @apply bg-orange hover:bg-orange-dark text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+  }
+
+  /* Loading spinner using three-color palette */
+  .spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #E9631A; /* Orange */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #315762; /* Dark Slate */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1F3A42; /* Dark Slate dark */
+}
