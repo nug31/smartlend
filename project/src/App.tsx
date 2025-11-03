@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { DataProvider, useData } from './contexts/DataContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { ToastContainer } from './components/UI/Toast';
+import { LoadingScreen } from './components/LoadingScreen';
 
 // Version 1.0.1 - Fixed translation errors by removing i18n completely
 import { LoginForm } from './components/Auth/LoginForm';
@@ -406,6 +407,27 @@ const AppContent: React.FC = () => {
 };
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if this is the first visit
+    const hasVisited = sessionStorage.getItem('hasVisited');
+
+    if (hasVisited) {
+      // Skip loading screen if already visited in this session
+      setIsLoading(false);
+    }
+  }, []);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+    sessionStorage.setItem('hasVisited', 'true');
+  };
+
+  if (isLoading) {
+    return <LoadingScreen onLoadingComplete={handleLoadingComplete} />;
+  }
+
   return (
     <AuthProvider>
       <NotificationProvider>
