@@ -1491,7 +1491,7 @@ async function startServer() {
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 PostgreSQL server running on port ${PORT}`);
       console.log(`📊 Health check: http://localhost:${PORT}/health`);
-      console.log(`🌐 Railway URL: https://loan-production-a1a2.up.railway.app`);
+      console.log(`🌐 Railway URL: https://smartlend-production.up.railway.app`);
       console.log(`🔒 CORS: Allowing all origins for debugging`);
     });
   } catch (error) {
