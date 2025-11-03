@@ -111,7 +111,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
           </div>
 
           <div className="mt-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-1">Loan Mitra</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-1">SmartLend</h1>
             <p className="text-sm text-red-600 font-medium mb-4">Asset Management System</p>
             <h2 className="text-3xl font-extrabold text-gray-900">
               Create your account

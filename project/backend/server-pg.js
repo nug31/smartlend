@@ -771,7 +771,7 @@ app.post('/api/auth/login', async (req, res) => {
       userId: user.id,
       type: 'test',
       title: 'Welcome Back! 👋',
-      message: `Hello ${user.name}, welcome back to LoanMitra!`,
+      message: `Hello ${user.name}, welcome back to SmartLend!`,
       isRead: false,
       createdAt: new Date(),
       relatedId: null

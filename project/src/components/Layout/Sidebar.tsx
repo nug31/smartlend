@@ -111,7 +111,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isOpen
               <span className="text-white font-bold text-sm">NUG</span>
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-900">LoanMitra</p>
+              <p className="text-sm font-semibold text-gray-900">SmartLend</p>
               <p className="text-xs text-gray-500">Developed by NUG</p>
             </div>
           </div>

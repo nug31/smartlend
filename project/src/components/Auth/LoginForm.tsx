@@ -103,7 +103,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onToggleForm }) => {
               </div>
 
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold gradient-text mb-2">LoanMitra</h1>
+                <h1 className="text-3xl font-bold gradient-text mb-2">SmartLend</h1>
                 <p className="text-white/80 font-medium text-sm tracking-wide">Asset Management System</p>
                 <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-blue-500 rounded-full mx-auto"></div>
               </div>
