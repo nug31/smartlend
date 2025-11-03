@@ -139,36 +139,30 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
 
 
   const ItemCard: React.FC<{ item: Item }> = ({ item }) => (
-    <div className="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-orange-300 transition-all duration-300 transform hover:-translate-y-1">
-      {/* Image Placeholder with Gradient */}
-      <div className="relative h-48 bg-gradient-to-br from-orange-100 via-orange-50 to-gray-100 flex items-center justify-center">
-        <Package size={48} className="text-orange-400 group-hover:text-orange-500 transition-colors" />
-        
-        {/* Availability Badge */}
-        <div className="absolute top-3 right-3">
-          <span className={`px-2 py-1 rounded-full text-xs font-semibold shadow-sm ${getAvailabilityColor(item)}`}>
-            {item.availableQuantity > 0 ? 'In Stock' : 'Out of Stock'}
-          </span>
-        </div>
-        
-        {/* Condition Badge */}
-        <div className="absolute top-3 left-3">
+    <div className="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-orange-300 transition-all duration-300">
+      {/* Content */}
+      <div className="p-4 space-y-3">
+        {/* Header with Badges */}
+        <div className="flex items-start justify-between gap-2 mb-2">
+          {/* Condition Badge */}
           <span className={`px-2 py-1 rounded-full text-xs font-medium ${getConditionColor(item.condition)}`}>
             {item.condition.charAt(0).toUpperCase() + item.condition.slice(1)}
           </span>
+
+          {/* Availability Badge */}
+          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getAvailabilityColor(item)}`}>
+            {item.availableQuantity > 0 ? 'In Stock' : 'Out of Stock'}
+          </span>
         </div>
-      </div>
-      
-      {/* Content */}
-      <div className="p-4 space-y-3">
-        {/* Item Name & Description */}
+
+        {/* Item Name */}
         <div>
           <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-2 group-hover:text-orange-600 transition-colors">
             {item.name}
           </h3>
           <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>
         </div>
-        
+
         {/* Item Details */}
         <div className="space-y-2">
           {/* Category with Icon */}
@@ -178,7 +172,7 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
             </div>
             <span className="text-sm font-medium text-gray-700">{item.category}</span>
           </div>
-          
+
           {/* Location if available */}
           {item.location && (
             <div className="flex items-center space-x-2">
@@ -188,7 +182,7 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
               <span className="text-sm text-gray-600">{item.location}</span>
             </div>
           )}
-          
+
           {/* Availability */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -202,30 +196,30 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
             </span>
           </div>
         </div>
-        
+
         {/* Action Buttons */}
-        <div className="flex space-x-2 pt-2">
-          {/* Quick View Button */}
-          <button className="flex-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors flex items-center justify-center space-x-1">
-            <Eye size={14} />
-            <span className="text-sm font-medium">View</span>
-          </button>
-          
-          {/* Request Button */}
+        <div className="flex flex-col space-y-2 pt-2">
+          {/* Request Button - Full Width & Prominent */}
           {item.availableQuantity > 0 ? (
             <button
-              className="flex-1 px-3 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg flex items-center justify-center space-x-1"
+              className="w-full px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 font-semibold"
               onClick={() => openRequestForm(item)}
             >
-              <ShoppingCart size={14} />
-              <span className="text-sm font-medium">Request</span>
+              <ShoppingCart size={18} />
+              <span>Request Item</span>
             </button>
           ) : (
-            <button className="flex-1 px-3 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed flex items-center justify-center space-x-1">
-              <Clock size={14} />
-              <span className="text-sm font-medium">Unavailable</span>
+            <button className="w-full px-4 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed flex items-center justify-center space-x-2 font-semibold">
+              <Clock size={18} />
+              <span>Unavailable</span>
             </button>
           )}
+
+          {/* Quick View Button - Secondary */}
+          <button className="w-full px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors flex items-center justify-center space-x-1 text-sm">
+            <Eye size={14} />
+            <span className="font-medium">View Details</span>
+          </button>
         </div>
       </div>
     </div>
