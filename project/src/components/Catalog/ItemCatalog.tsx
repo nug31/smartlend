@@ -202,23 +202,23 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
           {/* Request Button - Full Width & Prominent */}
           {item.availableQuantity > 0 ? (
             <button
-              className="w-full px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 font-semibold"
+              className="w-full px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2 font-bold text-base"
               onClick={() => openRequestForm(item)}
             >
-              <ShoppingCart size={18} />
+              <ShoppingCart size={20} strokeWidth={2.5} />
               <span>Request Item</span>
             </button>
           ) : (
-            <button className="w-full px-4 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed flex items-center justify-center space-x-2 font-semibold">
-              <Clock size={18} />
+            <button className="w-full px-4 py-3 bg-gray-400 text-gray-600 rounded-lg cursor-not-allowed flex items-center justify-center space-x-2 font-bold text-base">
+              <Clock size={20} strokeWidth={2.5} />
               <span>Unavailable</span>
             </button>
           )}
 
           {/* Quick View Button - Secondary */}
-          <button className="w-full px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors flex items-center justify-center space-x-1 text-sm">
+          <button className="w-full px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-colors flex items-center justify-center space-x-1 text-sm font-medium">
             <Eye size={14} />
-            <span className="font-medium">View Details</span>
+            <span>View Details</span>
           </button>
         </div>
       </div>
