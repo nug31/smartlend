@@ -52,7 +52,16 @@ app.options('*', (req, res) => {
 });
 
 // PostgreSQL connection
-const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://postgres:tAcyywGrcGlyNctqFVoACoyEMGMDgFjH@trolley.proxy.rlwy.net:25351/railway';
+const DATABASE_URL = process.env.DATABASE_URL;
+
+if (!DATABASE_URL) {
+  console.error('❌ DATABASE_URL is not set!');
+  console.error('Please set DATABASE_URL environment variable in Railway');
+  process.exit(1);
+}
+
+console.log('🔗 Connecting to database...');
+console.log('DATABASE_URL:', DATABASE_URL ? 'Set ✅' : 'Not set ❌');
 
 const sequelize = new Sequelize(DATABASE_URL, {
   dialect: 'postgres',
@@ -62,6 +71,12 @@ const sequelize = new Sequelize(DATABASE_URL, {
       require: true,
       rejectUnauthorized: false
     }
+  },
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
   }
 });
 
