@@ -111,63 +111,6 @@ export const ManageLoans: React.FC = () => {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Pending Requests</p>
-              <p className="text-2xl font-bold text-yellow-600">
-                {loans.filter(l => l.status === 'pending').length}
-              </p>
-            </div>
-            <div className="p-3 rounded-full bg-yellow-100">
-              <Clock className="text-yellow-600" size={24} />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Active Loans</p>
-              <p className="text-2xl font-bold text-green-600">
-                {loans.filter(l => l.status === 'active').length}
-              </p>
-            </div>
-            <div className="p-3 rounded-full bg-green-100">
-              <CheckCircle className="text-green-600" size={24} />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Overdue Items</p>
-              <p className="text-2xl font-bold text-orange">
-                {loans.filter(l => l.status === 'overdue').length}
-              </p>
-            </div>
-            <div className="p-3 rounded-full bg-orange-light">
-              <AlertTriangle className="text-orange" size={24} />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Loans</p>
-              <p className="text-2xl font-bold text-gray-800">{loans.length}</p>
-            </div>
-            <div className="p-3 rounded-full bg-gray-100">
-              <Eye className="text-gray-600" size={24} />
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Search and Filters */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div className="flex flex-col md:flex-row gap-4">
