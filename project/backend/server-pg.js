@@ -412,24 +412,42 @@ app.get('/api/dashboard/stats', async (req, res) => {
 
     // Get total items count
     const totalItems = await Item.count();
+    console.log('  Total Items:', totalItems);
 
     // Get active loans count (only 'active' status, not 'approved')
     const activeLoans = await Loan.count({
       where: { status: 'active' }
     });
+    console.log('  Active Loans:', activeLoans);
 
     // Get pending requests count
     const pendingRequests = await Loan.count({
       where: { status: 'pending' }
     });
+    console.log('  Pending Requests:', pendingRequests);
 
     // Get overdue items count
     const overdueItems = await Loan.count({
       where: { status: 'overdue' }
     });
+    console.log('  Overdue Items:', overdueItems);
 
     // Get total users count
     const totalUsers = await User.count();
+    console.log('  Total Users:', totalUsers);
+
+    // Debug: Show all loans with their statuses
+    const allLoans = await Loan.findAll({
+      attributes: ['id', 'status', 'userId', 'itemId']
+    });
+    console.log('  All Loans Count:', allLoans.length);
+    console.log('  Loans by Status:', {
+      active: allLoans.filter(l => l.status === 'active').length,
+      pending: allLoans.filter(l => l.status === 'pending').length,
+      overdue: allLoans.filter(l => l.status === 'overdue').length,
+      returned: allLoans.filter(l => l.status === 'returned').length,
+      cancelled: allLoans.filter(l => l.status === 'cancelled').length
+    });
 
     // Get category breakdown using raw SQL
     const categoryBreakdownResult = await sequelize.query(`

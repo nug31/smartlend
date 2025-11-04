@@ -166,58 +166,52 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const loadDashboardStats = async () => {
     try {
       console.log('📊 Loading dashboard stats from API...');
-      console.log('📊 Current loans data for stats calculation:', loans.length, 'loans');
-      console.log('📊 Loans breakdown:', loans.map(l => ({
-        id: l.id.substring(0, 8),
-        status: l.status,
-        userId: l.userId?.substring(0, 8),
-        itemId: l.itemId?.substring(0, 8)
-      })));
+      console.log('📊 Current data:', {
+        items: items.length,
+        loans: loans.length,
+        categories: categories.length
+      });
+      console.log('📊 Loans breakdown by status:', {
+        active: loans.filter(l => l.status === 'active').length,
+        pending: loans.filter(l => l.status === 'pending').length,
+        overdue: loans.filter(l => l.status === 'overdue').length,
+        returned: loans.filter(l => l.status === 'returned').length,
+        cancelled: loans.filter(l => l.status === 'cancelled').length
+      });
 
       const response = await apiService.getDashboardStats();
       if (response.data) {
-        console.log('✅ Dashboard stats loaded from API:', response.data);
-        console.log('📊 API vs Expected comparison:');
-        console.log('  API activeLoans:', response.data.activeLoans);
-        console.log('  Expected activeLoans:', loans.filter(l => l.status === 'active').length);
-        console.log('  API pendingRequests:', response.data.pendingRequests);
-        console.log('  Expected pendingRequests:', loans.filter(l => l.status === 'pending').length);
-        console.log('  API overdueItems:', response.data.overdueItems);
-        console.log('  Expected overdueItems:', loans.filter(l => l.status === 'overdue').length);
+        console.log('✅ Dashboard stats from API:', response.data);
         setDashboardStats(response.data);
       } else {
         console.error('❌ Failed to load dashboard stats:', response.error);
-        console.log('🔄 Using fallback calculation...');
-        // Fallback to calculated stats
-        console.log('🔍 Calculating fallback stats from loans:', loans.length, 'loans');
-        console.log('🔍 Loans for fallback calculation:', loans.map(l => ({ id: l.id, status: l.status, userId: l.userId })));
-        const fallbackStats: DashboardStats = {
+        // Use real-time calculated stats from current data
+        const calculatedStats: DashboardStats = {
           totalItems: items.length,
           activeLoans: loans.filter(l => l.status === 'active').length,
           pendingRequests: loans.filter(l => l.status === 'pending').length,
           overdueItems: loans.filter(l => l.status === 'overdue').length,
-          totalUsers: 5,
+          totalUsers: 0,
           categoryBreakdown: categories.map(c => ({ category: c.name, count: c.itemCount })),
           loanTrends: []
         };
-        console.log('✅ Dashboard stats calculated as fallback:', fallbackStats);
-        setDashboardStats(fallbackStats);
+        console.log('✅ Using calculated stats:', calculatedStats);
+        setDashboardStats(calculatedStats);
       }
     } catch (error) {
       console.error('❌ Error loading dashboard stats:', error);
-      console.log('🔄 Using fallback calculation after error...');
-      // Fallback to calculated stats
-      const fallbackStats: DashboardStats = {
+      // Use real-time calculated stats from current data
+      const calculatedStats: DashboardStats = {
         totalItems: items.length,
         activeLoans: loans.filter(l => l.status === 'active').length,
         pendingRequests: loans.filter(l => l.status === 'pending').length,
         overdueItems: loans.filter(l => l.status === 'overdue').length,
-        totalUsers: 5,
+        totalUsers: 0,
         categoryBreakdown: categories.map(c => ({ category: c.name, count: c.itemCount })),
         loanTrends: []
       };
-      console.log('✅ Dashboard stats calculated as fallback after error:', fallbackStats);
-      setDashboardStats(fallbackStats);
+      console.log('✅ Using calculated stats after error:', calculatedStats);
+      setDashboardStats(calculatedStats);
     }
   };
 

@@ -409,19 +409,8 @@ const AppContent: React.FC = () => {
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Check if this is the first visit
-    const hasVisited = sessionStorage.getItem('hasVisited');
-
-    if (hasVisited) {
-      // Skip loading screen if already visited in this session
-      setIsLoading(false);
-    }
-  }, []);
-
   const handleLoadingComplete = () => {
     setIsLoading(false);
-    sessionStorage.setItem('hasVisited', 'true');
   };
 
   if (isLoading) {
