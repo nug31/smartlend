@@ -172,90 +172,94 @@ export const MyLoans: React.FC = () => {
     const daysUntilDue = getDaysUntilDue(loan.endDate);
 
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-              <Package size={32} className="text-gray-400" />
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow">
+        {/* Mobile-optimized header */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
+          <div className="flex items-start gap-3">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <Package size={28} className="text-gray-400 sm:w-8 sm:h-8" />
             </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900">{item?.name}</h3>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{item?.name}</h3>
               <p className="text-sm text-gray-600">{item?.category}</p>
               {item?.location && (
-                <p className="text-xs text-gray-500">📍 {item.location}</p>
+                <p className="text-xs text-gray-500 mt-0.5">📍 {item.location}</p>
               )}
-              <div className="flex items-center space-x-2 mt-1">
-                <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${getStatusColor(loan.status)}`}>
+              <div className="flex items-center gap-2 mt-2">
+                <span className={`px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(loan.status)}`}>
                   {getStatusIcon(loan.status)}
                   <span className="capitalize">{loan.status}</span>
                 </span>
               </div>
             </div>
           </div>
-          
-          <div className="text-right">
-            <p className="text-sm text-gray-500">Quantity: {loan.quantity}</p>
-            <p className="text-sm text-gray-500">
-              Due: {new Date(loan.endDate).toLocaleDateString()}
-            </p>
-            {loan.status === 'active' && (
-              <p className={`text-sm font-medium ${
-                daysUntilDue <= 0 ? 'text-red-600' : ''
-              }`}>
-                {daysUntilDue <= 0 ? 'Overdue' : ''}
-              </p>
+
+          {/* Mobile-optimized info */}
+          <div className="flex sm:flex-col gap-4 sm:gap-1 text-sm sm:text-right">
+            <div>
+              <p className="text-gray-500">Qty: <span className="font-medium text-gray-900">{loan.quantity}</span></p>
+            </div>
+            <div>
+              <p className="text-gray-500">Due: <span className="font-medium text-gray-900">{new Date(loan.endDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</span></p>
+            </div>
+            {loan.status === 'active' && daysUntilDue <= 0 && (
+              <p className="text-sm font-medium text-red-600">Overdue</p>
             )}
           </div>
         </div>
 
-        <div className="border-t border-gray-200 pt-4">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
-              {loan.purpose && <p>Purpose: {loan.purpose}</p>}
-              {loan.notes && <p>Notes: {loan.notes}</p>}
-            </div>
-            
-            <div className="flex space-x-2">
-              <button
-                onClick={() => showDetails(loan)}
-                className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
-              >
-                <Eye size={16} />
-              </button>
-
-              {loan.status === 'pending' && (
-                <button
-                  onClick={() => handleCancel(loan)}
-                  className="px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 transition-colors flex items-center space-x-1"
-                >
-                  <XCircle size={14} />
-                  <span>Cancel Request</span>
-                </button>
-              )}
-
-              {loan.status === 'active' && (
-                <>
-                  <button
-                    onClick={() => handleExtension(loan)}
-                    className="px-3 py-1 bg-yellow-600 text-white text-sm rounded-md hover:bg-yellow-700 transition-colors flex items-center space-x-1"
-                  >
-                    <RotateCcw size={14} />
-                    <span>Extend</span>
-                  </button>
-                  <button
-                    onClick={() => handleReturn(loan)}
-                    style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }}
-                    className="px-3 py-1 text-sm rounded-md hover:shadow-lg transition-all flex items-center space-x-1"
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#C54A0A'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E9631A'}
-                  >
-                    <CheckCircle size={14} />
-                    <span>Sudah Mengembalikan</span>
-                  </button>
-                </>
-              )}
+        {/* Purpose/Notes - Mobile optimized */}
+        {(loan.purpose || loan.notes) && (
+          <div className="mb-3 pb-3 border-b border-gray-200">
+            <div className="text-sm text-gray-600 space-y-1">
+              {loan.purpose && <p className="line-clamp-2"><span className="font-medium">Purpose:</span> {loan.purpose}</p>}
+              {loan.notes && <p className="line-clamp-2"><span className="font-medium">Notes:</span> {loan.notes}</p>}
             </div>
           </div>
+        )}
+
+        {/* Mobile-optimized action buttons */}
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => showDetails(loan)}
+            className="flex items-center justify-center gap-1.5 px-3 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium min-h-[44px]"
+          >
+            <Eye size={16} />
+            <span>Details</span>
+          </button>
+
+          {loan.status === 'pending' && (
+            <button
+              onClick={() => handleCancel(loan)}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium min-h-[44px]"
+            >
+              <XCircle size={16} />
+              <span>Cancel</span>
+            </button>
+          )}
+
+          {loan.status === 'active' && (
+            <>
+              <button
+                onClick={() => handleExtension(loan)}
+                className="flex items-center justify-center gap-1.5 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium min-h-[44px]"
+              >
+                <RotateCcw size={16} />
+                <span>Extend</span>
+              </button>
+              <button
+                onClick={() => handleReturn(loan)}
+                style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }}
+                className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg hover:shadow-lg transition-all text-sm font-medium min-h-[44px]"
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#C54A0A'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E9631A'}
+              >
+                <CheckCircle size={16} />
+                <span className="hidden sm:inline">Sudah Mengembalikan</span>
+                <span className="sm:hidden">Kembalikan</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
     );
@@ -265,22 +269,23 @@ export const MyLoans: React.FC = () => {
                      activeTab === 'pending' ? pendingLoans : historyLoans;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">My Loans</h1>
-        <button className="flex items-center space-x-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors">
+    <div className="space-y-4 sm:space-y-6 pb-20 sm:pb-6">
+      {/* Mobile-optimized header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">My Loans</h1>
+        <button className="hidden sm:flex items-center space-x-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors">
           <Download size={20} />
           <span>Export Report</span>
         </button>
       </div>
 
-      {/* Tabs */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      {/* Mobile-optimized tabs */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="flex border-b border-gray-200">
           {[
-            { key: 'active', label: 'Active Loans', count: activeLoans.length },
-            { key: 'pending', label: 'Pending', count: pendingLoans.length },
-            { key: 'history', label: 'History', count: historyLoans.length }
+            { key: 'active', label: 'Active', fullLabel: 'Active Loans', count: activeLoans.length },
+            { key: 'pending', label: 'Pending', fullLabel: 'Pending', count: pendingLoans.length },
+            { key: 'history', label: 'History', fullLabel: 'History', count: historyLoans.length }
           ].map((tab) => (
             <button
               key={tab.key}
@@ -290,14 +295,15 @@ export const MyLoans: React.FC = () => {
                   ? { color: '#E9631A', borderBottomColor: '#E9631A', backgroundColor: '#FFF5F0' }
                   : {}
               }
-              className={`flex-1 px-6 py-4 text-sm font-medium transition-all relative ${
+              className={`flex-1 px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium transition-all relative min-h-[56px] ${
                 activeTab === tab.key
                   ? 'border-b-2 font-semibold'
                   : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
               }`}
             >
-              <span className="flex items-center justify-center gap-2">
-                {tab.label}
+              <span className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
+                <span className="hidden sm:inline">{tab.fullLabel}</span>
+                <span className="sm:hidden">{tab.label}</span>
                 <span
                   style={
                     tab.key === 'pending' && tab.count > 0
@@ -316,53 +322,53 @@ export const MyLoans: React.FC = () => {
         </div>
       </div>
 
-      {/* Loans List */}
+      {/* Mobile-optimized loans list */}
       {currentLoans.length === 0 ? (
-        <div className="text-center py-12">
+        <div className="bg-white rounded-xl border border-gray-200 text-center py-12 sm:py-16 px-4">
           <Package className="mx-auto text-gray-400 mb-4" size={48} />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
             No {activeTab} loans found
           </h3>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600 max-w-md mx-auto">
             {activeTab === 'active' && "You don't have any active loans at the moment."}
             {activeTab === 'pending' && "You don't have any pending loan requests."}
             {activeTab === 'history' && "You haven't completed any loans yet."}
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {currentLoans.map(loan => (
             <LoanCard key={loan.id} loan={loan} />
           ))}
         </div>
       )}
 
-      {/* Return Confirmation Modal */}
+      {/* Mobile-optimized Return Confirmation Modal */}
       {showReturnModal && selectedLoan && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-5 sm:p-6 w-full max-w-md">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
               Konfirmasi Pengembalian
             </h3>
-            <p className="text-gray-600 mb-6">
-              Apakah Anda sudah mengembalikan "{getItemById(selectedLoan.itemId)?.name}"?
+            <p className="text-sm sm:text-base text-gray-600 mb-5 sm:mb-6">
+              Apakah Anda sudah mengembalikan "<span className="font-medium">{getItemById(selectedLoan.itemId)?.name}</span>"?
               {!isAdmin && (
-                <span className="block mt-2 text-sm text-orange-600">
+                <span className="block mt-3 p-3 bg-orange-50 border border-orange-200 rounded-lg text-sm text-orange-700">
                   ⚠️ Pastikan barang sudah dikembalikan ke admin sebelum konfirmasi.
                 </span>
               )}
             </p>
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <button
                 onClick={() => setShowReturnModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex-1 px-4 py-3 sm:py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm sm:text-base min-h-[48px]"
               >
                 Batal
               </button>
               <button
                 onClick={confirmReturn}
                 style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }}
-                className="flex-1 px-4 py-2 rounded-lg hover:shadow-lg transition-all"
+                className="flex-1 px-4 py-3 sm:py-2.5 rounded-lg hover:shadow-lg transition-all font-medium text-sm sm:text-base min-h-[48px]"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#C54A0A'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E9631A'}
               >
@@ -373,55 +379,55 @@ export const MyLoans: React.FC = () => {
         </div>
       )}
 
-      {/* Cancel Request Modal */}
+      {/* Mobile-optimized Cancel Request Modal */}
       {showCancelModal && selectedLoan && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-5 sm:p-6 w-full max-w-md">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
               Cancel Loan Request
             </h3>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to cancel your request for "{getItemById(selectedLoan.itemId)?.name}"?
-              <span className="block mt-2 text-sm text-red-600">
+            <p className="text-sm sm:text-base text-gray-600 mb-5 sm:mb-6">
+              Are you sure you want to cancel your request for "<span className="font-medium">{getItemById(selectedLoan.itemId)?.name}</span>"?
+              <span className="block mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
                 ⚠️ This action cannot be undone. You will need to submit a new request if you change your mind.
               </span>
             </p>
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <button
                 onClick={() => setShowCancelModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex-1 px-4 py-3 sm:py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm sm:text-base min-h-[48px]"
               >
                 Keep Request
               </button>
               <button
                 onClick={confirmCancel}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="flex-1 px-4 py-3 sm:py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-sm sm:text-base min-h-[48px]"
               >
-                Yes, Cancel Request
+                Yes, Cancel
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Extension Modal */}
+      {/* Mobile-optimized Extension Modal */}
       {showExtensionModal && selectedLoan && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Request Extension</h3>
-            <p className="text-gray-600 mb-6">
-              Request a 7-day extension for "{getItemById(selectedLoan.itemId)?.name}"?
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-5 sm:p-6 w-full max-w-md">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Request Extension</h3>
+            <p className="text-sm sm:text-base text-gray-600 mb-5 sm:mb-6">
+              Request a 7-day extension for "<span className="font-medium">{getItemById(selectedLoan.itemId)?.name}</span>"?
             </p>
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <button
                 onClick={() => setShowExtensionModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex-1 px-4 py-3 sm:py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm sm:text-base min-h-[48px]"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmExtension}
-                className="flex-1 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
+                className="flex-1 px-4 py-3 sm:py-2.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium text-sm sm:text-base min-h-[48px]"
               >
                 Request Extension
               </button>

@@ -37,16 +37,17 @@ const Dashboard: React.FC<{ onTabChange: (tab: string) => void }> = ({ onTabChan
   console.log('🔍 Dashboard render - all loans:', loans.length);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-flash-white via-flash-white-light to-flash-white-dark">
-      <div className="space-y-8 p-6">
-        <div className="relative overflow-hidden bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-flash-white via-flash-white-light to-flash-white-dark pb-20 sm:pb-6">
+      <div className="space-y-4 sm:space-y-6 lg:space-y-8 p-3 sm:p-4 lg:p-6">
+        {/* Mobile-optimized Welcome Header */}
+        <div className="relative overflow-hidden bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-xl border border-white/20 p-4 sm:p-6 lg:p-8">
           <div className="absolute inset-0 bg-gradient-to-r from-orange/10 to-dark-slate/10"></div>
-          <div className="relative flex items-center justify-between">
-            <div className="space-y-2">
-              <h1 className="text-4xl font-bold gradient-text">
+          <div className="relative">
+            <div className="space-y-1 sm:space-y-2">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold gradient-text">
                 Welcome, {user?.firstName || user?.name || user?.email?.split('@')[0] || 'User'}! 👋
               </h1>
-              <p className="text-gray-600 text-lg">
+              <p className="text-gray-600 text-sm sm:text-base lg:text-lg">
                 {isAdmin
                   ? "Here's what's happening with your loans and items today."
                   : "Here's an overview of your personal loan activity."
@@ -56,57 +57,59 @@ const Dashboard: React.FC<{ onTabChange: (tab: string) => void }> = ({ onTabChan
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
+        {/* Mobile-optimized Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-5 lg:p-6">
             <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-600">
+              <div className="space-y-1 sm:space-y-2">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
                   {isAdmin ? 'Total Items' : 'My Total Loans'}
                 </p>
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900">
                   {isAdmin ? dashboardStats?.totalItems || 0 : userLoans.length}
                 </p>
               </div>
-              <div className="p-4 rounded-2xl bg-dark-slate shadow-lg">
-                <Package size={28} className="text-white" />
+              <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-dark-slate shadow-lg">
+                <Package size={24} className="text-white sm:w-7 sm:h-7" />
               </div>
             </div>
           </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-5 lg:p-6">
             <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-600">
+              <div className="space-y-1 sm:space-y-2">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
                   {isAdmin ? 'Active Loans' : 'My Active Loans'}
                 </p>
-                <p className="text-3xl font-bold text-gray-900">{isAdmin ? dashboardStats?.activeLoans || 0 : activeUserLoans.length}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900">{isAdmin ? dashboardStats?.activeLoans || 0 : activeUserLoans.length}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-dark-slate shadow-lg">
-                <FileText size={28} className="text-white" />
+              <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-dark-slate shadow-lg">
+                <FileText size={24} className="text-white sm:w-7 sm:h-7" />
               </div>
             </div>
           </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-5 lg:p-6 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-600">
+              <div className="space-y-1 sm:space-y-2">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
                   {isAdmin ? 'Pending Requests' : 'My Pending Requests'}
                 </p>
-                <p className="text-3xl font-bold text-gray-900">{isAdmin ? dashboardStats?.pendingRequests || 0 : pendingUserLoans.length}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900">{isAdmin ? dashboardStats?.pendingRequests || 0 : pendingUserLoans.length}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-orange shadow-lg">
-                <Clock size={28} className="text-white" />
+              <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-orange shadow-lg">
+                <Clock size={24} className="text-white sm:w-7 sm:h-7" />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-gray-900">Loan Trends</h3>
-              <div className="flex items-center space-x-2">
-                <TrendingUp className="text-orange" size={20} />
-                <span className="text-sm font-semibold text-orange">7 days</span>
+        {/* Mobile-optimized Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-5 lg:p-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900">Loan Trends</h3>
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <TrendingUp className="text-orange" size={16} />
+                <span className="text-xs sm:text-sm font-semibold text-orange">7 days</span>
               </div>
             </div>
 
@@ -211,35 +214,39 @@ const Dashboard: React.FC<{ onTabChange: (tab: string) => void }> = ({ onTabChan
               })}
             </div>
 
-            <div className="flex items-center justify-center space-x-4 text-xs">
-              <div className="flex items-center space-x-1">
+            {/* Mobile-optimized Legend */}
+            <div className="flex items-center justify-center gap-3 sm:gap-4 text-xs flex-wrap">
+              <div className="flex items-center gap-1.5">
                 <div className="w-3 h-3 bg-orange rounded-sm"></div>
                 <span className="text-gray-600">Requested</span>
               </div>
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center gap-1.5">
                 <div className="w-3 h-3 bg-dark-slate rounded-sm"></div>
                 <span className="text-gray-600">Approved</span>
               </div>
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center gap-1.5">
                 <div className="w-3 h-3 bg-dark-slate rounded-sm"></div>
                 <span className="text-gray-600">Returned</span>
               </div>
             </div>
 
-            <div className="mt-4 p-3 bg-gradient-to-r from-flash-white to-flash-white-light rounded-xl border border-orange">
-              <p className="text-sm text-gray-700">
+            <div className="mt-3 sm:mt-4 p-3 bg-gradient-to-r from-flash-white to-flash-white-light rounded-xl border border-orange">
+              <p className="text-xs sm:text-sm text-gray-700 text-center">
                 <span className="font-semibold text-orange">{loans.length}</span> total loans recorded
               </p>
             </div>
           </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-gray-900">
+
+          {/* Mobile-optimized Recent Activity */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-5 lg:p-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900">
                 {isAdmin ? 'Recent Activity' : 'My Recent Activity'}
               </h3>
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             </div>
-            <div className="space-y-3">
+            {/* Mobile-optimized Activity List */}
+            <div className="space-y-2 sm:space-y-3">
               {(isAdmin ? loans : userLoans)
                 .sort((a, b) => {
                   try {
@@ -269,12 +276,12 @@ const Dashboard: React.FC<{ onTabChange: (tab: string) => void }> = ({ onTabChan
                                        AlertTriangle;
 
                   return (
-                    <div key={loan.id} className="group flex items-center space-x-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-flash-white hover:to-flash-white-light rounded-xl transition-all duration-300 hover:shadow-md">
-                      <div className={`p-3 rounded-xl shadow-sm group-hover:scale-110 transition-transform duration-300 ${iconColor} text-white`}>
-                        <IconComponent size={18} />
+                    <div key={loan.id} className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-flash-white hover:to-flash-white-light rounded-lg sm:rounded-xl transition-all duration-300 hover:shadow-md">
+                      <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl shadow-sm group-hover:scale-110 transition-transform duration-300 ${iconColor} text-white flex-shrink-0`}>
+                        <IconComponent size={16} className="sm:w-[18px] sm:h-[18px]" />
                       </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-gray-900 group-hover:text-orange transition-colors">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs sm:text-sm font-semibold text-gray-900 group-hover:text-orange transition-colors truncate">
                           {loan.user?.name || 'Someone'} {activityType} {loan.item?.name || 'an item'}
                         </p>
                         <p className="text-xs text-gray-600 group-hover:text-gray-700 transition-colors">
@@ -297,44 +304,46 @@ const Dashboard: React.FC<{ onTabChange: (tab: string) => void }> = ({ onTabChan
                           })()}
                         </p>
                       </div>
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                         <div className="w-2 h-2 bg-orange rounded-full"></div>
                       </div>
                     </div>
                   );
                 })}
               {(isAdmin ? loans : userLoans).length === 0 && (
-                <div className="text-center py-8 text-gray-500">
-                  <Clock className="mx-auto mb-2 opacity-50" size={32} />
-                  <p>{isAdmin ? 'No recent activity' : 'No loan activity yet'}</p>
+                <div className="text-center py-6 sm:py-8 text-gray-500">
+                  <Clock className="mx-auto mb-2 opacity-50" size={28} />
+                  <p className="text-sm sm:text-base">{isAdmin ? 'No recent activity' : 'No loan activity yet'}</p>
                 </div>
               )}
             </div>
           </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h3>
-            <div className="grid grid-cols-2 gap-4">
+
+          {/* Mobile-optimized Quick Actions */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-5 lg:p-6">
+            <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Quick Actions</h3>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               <button
                 onClick={() => onTabChange('catalog')}
-                className="flex flex-col items-center justify-center space-y-2 p-4 bg-dark-slate hover:bg-dark-slate-dark text-white rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                className="flex flex-col items-center justify-center gap-2 p-4 sm:p-5 bg-dark-slate hover:bg-dark-slate-dark text-white rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg min-h-[100px] sm:min-h-[110px]"
               >
-                <Package size={24} />
-                <span className="text-sm font-semibold">Browse Items</span>
+                <Package size={24} className="sm:w-7 sm:h-7" />
+                <span className="text-xs sm:text-sm font-semibold text-center">Browse Items</span>
               </button>
               <button
                 onClick={() => onTabChange('my-loans')}
-                className="flex flex-col items-center justify-center space-y-2 p-4 bg-orange hover:bg-orange-dark text-white rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                className="flex flex-col items-center justify-center gap-2 p-4 sm:p-5 bg-orange hover:bg-orange-dark text-white rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg min-h-[100px] sm:min-h-[110px]"
               >
-                <FileText size={24} />
-                <span className="text-sm font-semibold">My Loans</span>
+                <FileText size={24} className="sm:w-7 sm:h-7" />
+                <span className="text-xs sm:text-sm font-semibold text-center">My Loans</span>
               </button>
               {isAdmin && (
                 <button
                   onClick={() => onTabChange('admin-users')}
-                  className="flex flex-col items-center justify-center space-y-2 p-4 bg-orange hover:bg-orange-dark text-white rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  className="flex flex-col items-center justify-center gap-2 p-4 sm:p-5 bg-orange hover:bg-orange-dark text-white rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg min-h-[100px] sm:min-h-[110px] col-span-2"
                 >
-                  <Users size={24} />
-                  <span className="text-sm font-semibold">Manage Users</span>
+                  <Users size={24} className="sm:w-7 sm:h-7" />
+                  <span className="text-xs sm:text-sm font-semibold text-center">Manage Users</span>
                 </button>
               )}
             </div>
