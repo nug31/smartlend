@@ -1219,15 +1219,15 @@ app.put('/api/loans/:id/return', async (req, res) => {
       ]
     });
 
-    console.log(`✅ PUT /api/loans/${req.params.id}/return - returned loan`);
+    console.log(`✅ PUT /api/loans/${req.params.id}/return - returned loan by user`);
 
     // Send notification to user about successful return
     const returnNotification = {
       id: `notif_${Date.now()}`,
       userId: updatedLoan.userId,
       type: 'item_returned',
-      title: 'Item Returned Successfully ✅',
-      message: `"${updatedLoan.item.name}" has been successfully returned. Thank you for using our service!`,
+      title: 'Pengembalian Berhasil ✅',
+      message: `"${updatedLoan.item.name}" telah berhasil dikembalikan. Terima kasih telah menggunakan SmartLend!`,
       isRead: false,
       createdAt: new Date(),
       relatedId: updatedLoan.id
@@ -1240,8 +1240,8 @@ app.put('/api/loans/:id/return', async (req, res) => {
     const adminReturnNotification = {
       id: `notif_${Date.now()}_admin`,
       type: 'item_returned',
-      title: 'Item Returned 📦',
-      message: `${updatedLoan.user.name} returned "${updatedLoan.item.name}"`,
+      title: 'Barang Dikembalikan 📦',
+      message: `${updatedLoan.user.name} telah mengembalikan "${updatedLoan.item.name}". Silakan verifikasi pengembalian.`,
       isRead: false,
       createdAt: new Date(),
       relatedId: updatedLoan.id

@@ -57,8 +57,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     notifications,
     markAsRead: markNotificationRead
   } = useNotificationsHook(user?.id);
-  
-  const { broadcastLoanUpdate, subscribeLoanUpdates } = useNotificationsContext();
+
+  const { broadcastLoanUpdate, subscribeLoanUpdates, addNotification } = useNotificationsContext();
   const [dashboardStats, setDashboardStats] = useState<DashboardStats>({
     totalItems: 0,
     activeLoans: 0,
@@ -454,13 +454,13 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
       // Find the current loan to get details for notification
       const currentLoan = loans.find(l => l.id === loanId);
       const item = currentLoan ? getItemById(currentLoan.itemId) : null;
-      
+
       await apiService.returnItem(loanId);
       setLoans(prev => prev.map(loan =>
         loan.id === loanId ? { ...loan, status: 'returned' as any, actualReturnDate: new Date() } : loan
       ));
-      
-      // Broadcast real-time update
+
+      // Broadcast real-time update to all users (especially admin)
       broadcastLoanUpdate({
         loanId,
         oldStatus: currentLoan?.status || 'active',
@@ -470,10 +470,26 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         userId: currentLoan?.userId
       });
 
+      // Show success notification to user
+      if (currentLoan?.userId === user?.id) {
+        addNotification({
+          type: 'success',
+          title: 'Pengembalian Berhasil! ✅',
+          message: `Terima kasih telah mengembalikan "${item?.name}". Admin akan segera memverifikasi.`,
+          duration: 8000
+        });
+      }
+
       // Refresh items to update available quantities
       await loadItems();
     } catch (error) {
       console.error('Error returning item:', error);
+      addNotification({
+        type: 'error',
+        title: 'Gagal Mengembalikan',
+        message: 'Terjadi kesalahan saat mengembalikan barang. Silakan coba lagi.',
+        duration: 5000
+      });
     }
   };
 

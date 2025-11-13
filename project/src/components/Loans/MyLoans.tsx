@@ -25,13 +25,12 @@ export const MyLoans: React.FC = () => {
   useEffect(() => {
     const unsubscribe = subscribeLoanUpdates((update: LoanStatusUpdate) => {
       console.log('📡 MyLoans received loan update:', update);
-      
-      // Only show notification for current user's loans
+
+      // Trigger a re-render to reflect updated loan status
+      setRefreshTrigger(prev => prev + 1);
+
+      // Show notification for current user's loans
       if (update.userId === user?.id) {
-        // Trigger a re-render to reflect updated loan status
-        setRefreshTrigger(prev => prev + 1);
-        
-        // Show user-specific notification
         if (update.oldStatus === 'pending' && update.newStatus === 'active') {
           addNotification({
             type: 'success',
@@ -48,10 +47,20 @@ export const MyLoans: React.FC = () => {
           });
         }
       }
+
+      // Show notification to admin when user returns item
+      if (isAdmin && update.oldStatus === 'active' && update.newStatus === 'returned') {
+        addNotification({
+          type: 'info',
+          title: 'Barang Dikembalikan 📦',
+          message: `${update.userName} telah mengembalikan "${update.itemName}". Silakan verifikasi.`,
+          duration: 10000
+        });
+      }
     });
 
     return unsubscribe;
-  }, [subscribeLoanUpdates, user?.id, addNotification]);
+  }, [subscribeLoanUpdates, user?.id, isAdmin, addNotification]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -83,7 +92,6 @@ export const MyLoans: React.FC = () => {
   };
 
   const handleReturn = (loan: Loan) => {
-    if (!isAdmin) return; // Only admin can return items
     setSelectedLoan(loan);
     setShowReturnModal(true);
   };
@@ -179,14 +187,16 @@ export const MyLoans: React.FC = () => {
                     <RotateCcw size={14} />
                     <span>Extend</span>
                   </button>
-                  {isAdmin && (
-                    <button
-                      onClick={() => handleReturn(loan)}
-                      className="px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition-colors"
-                    >
-                      Return
-                    </button>
-                  )}
+                  <button
+                    onClick={() => handleReturn(loan)}
+                    style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }}
+                    className="px-3 py-1 text-sm rounded-md hover:shadow-lg transition-all flex items-center space-x-1"
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#C54A0A'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E9631A'}
+                  >
+                    <CheckCircle size={14} />
+                    <span>Sudah Mengembalikan</span>
+                  </button>
                 </>
               )}
             </div>
@@ -253,26 +263,36 @@ export const MyLoans: React.FC = () => {
         </div>
       )}
 
-      {/* Return Modal - Only for Admin */}
-      {showReturnModal && selectedLoan && isAdmin && (
+      {/* Return Confirmation Modal */}
+      {showReturnModal && selectedLoan && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Confirm Return</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Konfirmasi Pengembalian
+            </h3>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to return "{getItemById(selectedLoan.itemId)?.name}"?
+              Apakah Anda sudah mengembalikan "{getItemById(selectedLoan.itemId)?.name}"?
+              {!isAdmin && (
+                <span className="block mt-2 text-sm text-orange-600">
+                  ⚠️ Pastikan barang sudah dikembalikan ke admin sebelum konfirmasi.
+                </span>
+              )}
             </p>
             <div className="flex space-x-4">
               <button
                 onClick={() => setShowReturnModal(false)}
                 className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
-                Cancel
+                Batal
               </button>
               <button
                 onClick={confirmReturn}
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }}
+                className="flex-1 px-4 py-2 rounded-lg hover:shadow-lg transition-all"
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#C54A0A'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E9631A'}
               >
-                Confirm Return
+                Ya, Sudah Dikembalikan
               </button>
             </div>
           </div>

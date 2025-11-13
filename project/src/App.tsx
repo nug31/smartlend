@@ -56,7 +56,7 @@ const Dashboard: React.FC<{ onTabChange: (tab: string) => void }> = ({ onTabChan
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-2">
@@ -95,19 +95,6 @@ const Dashboard: React.FC<{ onTabChange: (tab: string) => void }> = ({ onTabChan
               </div>
               <div className="p-4 rounded-2xl bg-orange shadow-lg">
                 <Clock size={28} className="text-white" />
-              </div>
-            </div>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-600">
-                  {isAdmin ? 'Overdue Items' : 'My Overdue Items'}
-                </p>
-                <p className="text-3xl font-bold text-gray-900">{isAdmin ? overdueLoans.length : userLoans.filter(l => l.status === 'overdue').length}</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-orange shadow-lg">
-                <AlertTriangle size={28} className="text-white" />
               </div>
             </div>
           </div>
