@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Package, AlertTriangle, CheckCircle, X, RotateCcw, Eye, Download } from 'lucide-react';
+import { Calendar, Clock, Package, AlertTriangle, CheckCircle, X, RotateCcw, Eye, Download, XCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useData } from '../../contexts/DataContext';
 import { useNotifications, LoanStatusUpdate } from '../../contexts/NotificationContext';
@@ -7,12 +7,13 @@ import { Loan } from '../../types';
 
 export const MyLoans: React.FC = () => {
   const { user, isAdmin } = useAuth();
-  const { getUserLoans, getItemById, returnItem, requestExtension } = useData();
+  const { getUserLoans, getItemById, returnItem, requestExtension, rejectLoan } = useData();
   const { subscribeLoanUpdates, addNotification } = useNotifications();
   const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null);
   const [showReturnModal, setShowReturnModal] = useState(false);
   const [showExtensionModal, setShowExtensionModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const userLoans = getUserLoans(user?.id || '');
@@ -136,6 +137,36 @@ export const MyLoans: React.FC = () => {
     }
   };
 
+  const handleCancel = (loan: Loan) => {
+    setSelectedLoan(loan);
+    setShowCancelModal(true);
+  };
+
+  const confirmCancel = async () => {
+    if (selectedLoan) {
+      try {
+        await rejectLoan(selectedLoan.id);
+        setShowCancelModal(false);
+        setSelectedLoan(null);
+
+        addNotification({
+          type: 'info',
+          title: 'Request Cancelled',
+          message: `Your request for "${getItemById(selectedLoan.itemId)?.name}" has been cancelled.`,
+          duration: 5000
+        });
+      } catch (error) {
+        console.error('Error cancelling loan:', error);
+        addNotification({
+          type: 'error',
+          title: 'Cancellation Failed',
+          message: 'Failed to cancel the request. Please try again.',
+          duration: 5000
+        });
+      }
+    }
+  };
+
   const LoanCard: React.FC<{ loan: Loan }> = ({ loan }) => {
     const item = loan.item || getItemById(loan.itemId);
     const daysUntilDue = getDaysUntilDue(loan.endDate);
@@ -185,13 +216,23 @@ export const MyLoans: React.FC = () => {
             </div>
             
             <div className="flex space-x-2">
-              <button 
+              <button
                 onClick={() => showDetails(loan)}
                 className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
               >
                 <Eye size={16} />
               </button>
-              
+
+              {loan.status === 'pending' && (
+                <button
+                  onClick={() => handleCancel(loan)}
+                  className="px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 transition-colors flex items-center space-x-1"
+                >
+                  <XCircle size={14} />
+                  <span>Cancel Request</span>
+                </button>
+              )}
+
               {loan.status === 'active' && (
                 <>
                   <button
@@ -326,6 +367,37 @@ export const MyLoans: React.FC = () => {
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E9631A'}
               >
                 Ya, Sudah Dikembalikan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel Request Modal */}
+      {showCancelModal && selectedLoan && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Cancel Loan Request
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to cancel your request for "{getItemById(selectedLoan.itemId)?.name}"?
+              <span className="block mt-2 text-sm text-red-600">
+                ⚠️ This action cannot be undone. You will need to submit a new request if you change your mind.
+              </span>
+            </p>
+            <div className="flex space-x-4">
+              <button
+                onClick={() => setShowCancelModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Keep Request
+              </button>
+              <button
+                onClick={confirmCancel}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Yes, Cancel Request
               </button>
             </div>
           </div>
