@@ -3,6 +3,7 @@ import { Search, Filter, Package, MapPin, Clock, Star, Eye, ShoppingCart, Grid, 
 import { useData } from '../../contexts/DataContext';
 import { Item } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNotifications } from '../../contexts/NotificationContext';
 
 interface ItemCatalogProps {
   onTabChange?: (tab: string) => void;
@@ -11,6 +12,7 @@ interface ItemCatalogProps {
 export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
   const { items, categories, searchItems, requestLoan } = useData();
   const { user } = useAuth();
+  const { addNotification } = useNotifications();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedCondition, setSelectedCondition] = useState('all');
@@ -75,14 +77,28 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
 
       console.log('✅ Loan request completed successfully');
 
+      // Show success notification
+      addNotification({
+        type: 'success',
+        title: 'Request Submitted! 📝',
+        message: `Your request for "${requestItem.name}" has been submitted. Check My Loans > Pending tab.`,
+        duration: 8000
+      });
+
       // Auto redirect to My Loans page to see pending request
       if (onTabChange) {
-        onTabChange('my-loans');
+        setTimeout(() => {
+          onTabChange('my-loans');
+        }, 500); // Small delay to show notification first
       }
     } catch (error) {
       console.error('❌ Error submitting loan request:', error);
-      setNotification(`❌ ERROR: Failed to submit request for '${requestItem?.name}'. Please try again.`);
-      setTimeout(() => setNotification(null), 5000);
+      addNotification({
+        type: 'error',
+        title: 'Request Failed',
+        message: `Failed to submit request for "${requestItem?.name}". Please try again.`,
+        duration: 5000
+      });
     }
   };
 

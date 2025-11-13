@@ -9,7 +9,6 @@ export const MyLoans: React.FC = () => {
   const { user, isAdmin } = useAuth();
   const { getUserLoans, getItemById, returnItem, requestExtension } = useData();
   const { subscribeLoanUpdates, addNotification } = useNotifications();
-  const [activeTab, setActiveTab] = useState<'active' | 'pending' | 'history'>('active');
   const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null);
   const [showReturnModal, setShowReturnModal] = useState(false);
   const [showExtensionModal, setShowExtensionModal] = useState(false);
@@ -20,6 +19,19 @@ export const MyLoans: React.FC = () => {
   const activeLoans = userLoans.filter(loan => loan.status === 'active');
   const pendingLoans = userLoans.filter(loan => loan.status === 'pending');
   const historyLoans = userLoans.filter(loan => ['returned', 'cancelled'].includes(loan.status));
+
+  // Auto-switch to pending tab if there are new pending loans and no active loans
+  const [activeTab, setActiveTab] = useState<'active' | 'pending' | 'history'>('active');
+  const [previousPendingCount, setPreviousPendingCount] = useState(0);
+
+  // Auto-switch to pending tab when new pending loan is added
+  useEffect(() => {
+    if (pendingLoans.length > previousPendingCount && pendingLoans.length > 0) {
+      console.log('🔔 New pending loan detected, switching to pending tab');
+      setActiveTab('pending');
+    }
+    setPreviousPendingCount(pendingLoans.length);
+  }, [pendingLoans.length]);
 
   // Subscribe to real-time loan updates
   useEffect(() => {
@@ -32,6 +44,8 @@ export const MyLoans: React.FC = () => {
       // Show notification for current user's loans
       if (update.userId === user?.id) {
         if (update.oldStatus === 'pending' && update.newStatus === 'active') {
+          // Auto-switch to active tab when loan is approved
+          setActiveTab('active');
           addNotification({
             type: 'success',
             title: 'Loan Approved! 🎉',
@@ -230,13 +244,32 @@ export const MyLoans: React.FC = () => {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as any)}
-              className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+              style={
                 activeTab === tab.key
-                  ? 'text-gray-800 border-b-2 border-gray-800 bg-gray-50'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? { color: '#E9631A', borderBottomColor: '#E9631A', backgroundColor: '#FFF5F0' }
+                  : {}
+              }
+              className={`flex-1 px-6 py-4 text-sm font-medium transition-all relative ${
+                activeTab === tab.key
+                  ? 'border-b-2 font-semibold'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
               }`}
             >
-              {tab.label} ({tab.count})
+              <span className="flex items-center justify-center gap-2">
+                {tab.label}
+                <span
+                  style={
+                    tab.key === 'pending' && tab.count > 0
+                      ? { backgroundColor: '#E9631A', color: '#FFFFFF' }
+                      : { backgroundColor: '#E5E7EB', color: '#6B7280' }
+                  }
+                  className={`inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full text-xs font-bold ${
+                    tab.key === 'pending' && tab.count > 0 ? 'animate-pulse' : ''
+                  }`}
+                >
+                  {tab.count}
+                </span>
+              </span>
             </button>
           ))}
         </div>
