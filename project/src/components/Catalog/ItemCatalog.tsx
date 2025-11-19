@@ -35,7 +35,11 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
     setDate('');
     setStartTime('');
     setReturnDate('');
+    setReturnTime('');
   };
+
+  // Check if all required fields are filled
+  const isFormValid = reason.trim() !== '' && date !== '' && returnDate !== '' && startTime !== '';
 
   const closeRequestForm = () => {
     setShowRequestForm(false);
@@ -273,31 +277,84 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
               </div>
 
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Reason</label>
-                <textarea value={reason} onChange={e => setReason(e.target.value)} required className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border-2 border-gray-300 rounded-lg text-sm sm:text-base min-h-[50px] sm:min-h-[80px] resize-none" placeholder="Enter your reason..." />
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                  Reason <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  value={reason}
+                  onChange={e => setReason(e.target.value)}
+                  required
+                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border-2 border-gray-300 rounded-lg text-sm sm:text-base min-h-[50px] sm:min-h-[80px] resize-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
+                  placeholder="Enter your reason for borrowing this item..."
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                  <input type="date" value={date} onChange={e => setDate(e.target.value)} required className="w-full px-2 sm:px-3 py-2 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base" />
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                    Start Date <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={date}
+                    onChange={e => setDate(e.target.value)}
+                    required
+                    className="w-full px-2 sm:px-3 py-2 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
+                  />
                 </div>
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Return Date</label>
-                  <input type="date" value={returnDate} onChange={e => setReturnDate(e.target.value)} required className="w-full px-2 sm:px-3 py-2 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base" />
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                    Return Date <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={returnDate}
+                    onChange={e => setReturnDate(e.target.value)}
+                    required
+                    className="w-full px-2 sm:px-3 py-2 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
+                  />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Start Time</label>
-                <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} required className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base" />
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+                  Start Time <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="time"
+                  value={startTime}
+                  onChange={e => setStartTime(e.target.value)}
+                  required
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
+                />
               </div>
+
+              {/* Helper text */}
+              {!isFormValid && (
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                  <p className="text-xs sm:text-sm text-orange-800 font-medium">
+                    ⚠️ Please fill in all required fields to submit your request
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Sticky Buttons at Bottom */}
             <div className="sticky bottom-0 bg-white border-t-2 border-gray-200 p-3 sm:p-5 flex gap-2 sm:gap-3 rounded-b-xl shadow-lg">
               <button type="button" onClick={closeRequestForm} className="flex-1 px-4 py-2.5 rounded-lg bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition-colors font-medium text-sm sm:text-base min-h-[44px]">Cancel</button>
-              <button type="submit" style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }} className="flex-1 px-4 py-2.5 rounded-lg hover:shadow-lg active:shadow-xl transition-all font-bold text-sm sm:text-base min-h-[44px]">Submit</button>
+              <button
+                type="submit"
+                disabled={!isFormValid}
+                style={{
+                  backgroundColor: isFormValid ? '#E9631A' : '#9CA3AF',
+                  color: '#FFFFFF',
+                  cursor: isFormValid ? 'pointer' : 'not-allowed',
+                  opacity: isFormValid ? 1 : 0.6
+                }}
+                className="flex-1 px-4 py-2.5 rounded-lg hover:shadow-lg active:shadow-xl transition-all font-bold text-sm sm:text-base min-h-[44px]"
+              >
+                Submit
+              </button>
             </div>
           </form>
         </div>
