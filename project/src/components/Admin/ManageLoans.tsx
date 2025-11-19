@@ -141,7 +141,7 @@ export const ManageLoans: React.FC = () => {
       </div>
 
       {/* Loans Table - Desktop */}
-      <div className="hidden lg:block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="hidden md:block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
@@ -275,7 +275,7 @@ export const ManageLoans: React.FC = () => {
       </div>
 
       {/* Loans Cards - Mobile */}
-      <div className="lg:hidden space-y-3">
+      <div className="md:hidden space-y-3">
         {filteredLoans.map((loan) => {
           const item = getItemById(loan.itemId);
           const isOverdue = loan.status === 'overdue';
