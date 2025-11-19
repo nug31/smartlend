@@ -20,18 +20,22 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) 
   // Create menu items for bottom nav (max 5 items for mobile)
   const menuItems = [];
 
-  // Basic menu items for all users
-  menuItems.push(
-    { id: 'dashboard', label: 'Home', icon: Home, adminOnly: false },
-    { id: 'catalog', label: 'Catalog', icon: Package, adminOnly: false },
-    { id: 'my-loans', label: 'My Loans', icon: FileText, adminOnly: false }
-  );
-
-  // Add admin menu items if user is admin
+  // Different menu for admin vs regular user
   if (isAdmin && user?.role === 'admin') {
+    // Admin menu
     menuItems.push(
-      { id: 'admin-items', label: 'Items', icon: Package, adminOnly: true },
+      { id: 'dashboard', label: 'Home', icon: Home, adminOnly: false },
+      { id: 'catalog', label: 'Catalog', icon: Package, adminOnly: false },
+      { id: 'admin-loans', label: 'Manage Loans', icon: FileText, adminOnly: true },
+      { id: 'admin-items', label: 'Items', icon: Tag, adminOnly: true },
       { id: 'settings', label: 'Settings', icon: Settings, adminOnly: true }
+    );
+  } else {
+    // Regular user menu
+    menuItems.push(
+      { id: 'dashboard', label: 'Home', icon: Home, adminOnly: false },
+      { id: 'catalog', label: 'Catalog', icon: Package, adminOnly: false },
+      { id: 'my-loans', label: 'My Loans', icon: FileText, adminOnly: false }
     );
   }
 
