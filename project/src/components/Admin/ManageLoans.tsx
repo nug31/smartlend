@@ -140,8 +140,8 @@ export const ManageLoans: React.FC = () => {
         </div>
       </div>
 
-      {/* Loans Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      {/* Loans Table - Desktop */}
+      <div className="hidden lg:block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
@@ -171,7 +171,7 @@ export const ManageLoans: React.FC = () => {
                 const item = getItemById(loan.itemId);
                 const isOverdue = loan.status === 'overdue';
                 const daysOverdue = isOverdue ? getDaysOverdue(loan.endDate) : 0;
-                
+
                 return (
                   <tr key={loan.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -238,7 +238,7 @@ export const ManageLoans: React.FC = () => {
                         >
                           <Eye size={16} />
                         </button>
-                        
+
                         {loan.status === 'pending' && (
                           <>
                             <button
@@ -255,7 +255,7 @@ export const ManageLoans: React.FC = () => {
                             </button>
                           </>
                         )}
-                        
+
                         {(loan.status === 'active' || loan.status === 'overdue') && (
                           <button
                             onClick={() => handleReturn(loan.id)}
@@ -272,6 +272,92 @@ export const ManageLoans: React.FC = () => {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Loans Cards - Mobile */}
+      <div className="lg:hidden space-y-3">
+        {filteredLoans.map((loan) => {
+          const item = getItemById(loan.itemId);
+          const isOverdue = loan.status === 'overdue';
+          const daysOverdue = isOverdue ? getDaysOverdue(loan.endDate) : 0;
+
+          return (
+            <div key={loan.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+              {/* Item & User Info */}
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-1">
+                    {loan.item?.name || item?.name}
+                  </h3>
+                  <p className="text-xs text-gray-500 mb-1">
+                    {loan.item?.category || item?.category}
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    👤 {loan.user?.name || `User #${loan.userId}`}
+                  </p>
+                </div>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${getStatusColor(loan.status)}`}>
+                  {getStatusIcon(loan.status)}
+                  <span className="capitalize">{loan.status}</span>
+                </span>
+              </div>
+
+              {/* Dates */}
+              <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
+                <div>
+                  <span className="text-gray-500">Start:</span>
+                  <p className="font-medium text-gray-900">{new Date(loan.startDate).toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <span className="text-gray-500">End:</span>
+                  <p className="font-medium text-gray-900">{new Date(loan.endDate).toLocaleDateString()}</p>
+                </div>
+              </div>
+
+              {isOverdue && (
+                <div className="text-xs text-red-600 font-medium mb-3">
+                  ⚠️ {daysOverdue} days overdue
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex gap-2 pt-3 border-t border-gray-200">
+                {loan.status === 'pending' && (
+                  <>
+                    <button
+                      onClick={() => handleApprove(loan.id)}
+                      className="flex-1 px-4 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors min-h-[44px]"
+                    >
+                      ✓ Approve
+                    </button>
+                    <button
+                      onClick={() => handleReject(loan.id)}
+                      className="flex-1 px-4 py-2.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 active:bg-red-800 transition-colors min-h-[44px]"
+                    >
+                      ✕ Reject
+                    </button>
+                  </>
+                )}
+
+                {(loan.status === 'active' || loan.status === 'overdue') && (
+                  <button
+                    onClick={() => handleReturn(loan.id)}
+                    className="flex-1 px-4 py-2.5 bg-gray-800 text-white text-sm font-medium rounded-lg hover:bg-gray-900 active:bg-black transition-colors min-h-[44px]"
+                  >
+                    ✓ Mark Returned
+                  </button>
+                )}
+
+                <button
+                  onClick={() => showDetails(loan)}
+                  className="px-4 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors min-h-[44px]"
+                >
+                  👁️ Details
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Loan Details Modal */}
