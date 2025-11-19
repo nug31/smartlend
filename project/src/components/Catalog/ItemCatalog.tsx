@@ -261,8 +261,8 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
       )}
       {/* Mobile-optimized Request Form Modal with Sticky Buttons */}
       {showRequestForm && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black bg-opacity-50 p-0 sm:p-4 pb-0">
-          <form onSubmit={handleRequestSubmit} className="bg-white rounded-t-2xl sm:rounded-xl shadow-lg w-full max-w-md max-h-[75vh] sm:max-h-[90vh] mb-20 sm:mb-0 flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 pb-20 sm:pb-4">
+          <form onSubmit={handleRequestSubmit} className="bg-white rounded-xl shadow-lg w-full max-w-md max-h-[70vh] sm:max-h-[85vh] flex flex-col">
             {/* Scrollable Content */}
             <div className="overflow-y-auto flex-1 p-4 sm:p-6 space-y-2.5 sm:space-y-4">
               <h2 className="text-base sm:text-2xl font-bold text-gray-900 sticky top-0 bg-white pb-1.5 -mt-1 z-10">Request Item</h2>
@@ -294,10 +294,10 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
               </div>
             </div>
 
-            {/* Sticky Buttons at Bottom - Above Bottom Nav */}
-            <div className="sticky bottom-0 bg-white border-t-2 border-gray-200 p-2.5 sm:p-5 flex gap-2 sm:gap-3 rounded-b-2xl sm:rounded-b-xl shadow-lg">
-              <button type="button" onClick={closeRequestForm} className="flex-1 px-3 py-2.5 rounded-lg bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition-colors font-medium text-sm sm:text-base min-h-[44px]">Cancel</button>
-              <button type="submit" style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }} className="flex-1 px-3 py-2.5 rounded-lg hover:shadow-lg active:shadow-xl transition-all font-bold text-sm sm:text-base min-h-[44px]">Submit</button>
+            {/* Sticky Buttons at Bottom */}
+            <div className="sticky bottom-0 bg-white border-t-2 border-gray-200 p-3 sm:p-5 flex gap-2 sm:gap-3 rounded-b-xl shadow-lg">
+              <button type="button" onClick={closeRequestForm} className="flex-1 px-4 py-2.5 rounded-lg bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition-colors font-medium text-sm sm:text-base min-h-[44px]">Cancel</button>
+              <button type="submit" style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }} className="flex-1 px-4 py-2.5 rounded-lg hover:shadow-lg active:shadow-xl transition-all font-bold text-sm sm:text-base min-h-[44px]">Submit</button>
             </div>
           </form>
         </div>
