@@ -259,36 +259,45 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
           {notification}
         </div>
       )}
-      {/* Mobile-optimized Request Form Modal */}
+      {/* Mobile-optimized Request Form Modal with Sticky Buttons */}
       {showRequestForm && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black bg-opacity-50 p-0 sm:p-4">
-          <form onSubmit={handleRequestSubmit} className="bg-white rounded-t-2xl sm:rounded-xl shadow-lg p-5 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto space-y-4">
-            <h2 className="text-xl sm:text-2xl font-bold mb-3 text-gray-900">Request Item</h2>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Item</label>
-              <input type="text" value={requestItem?.name || ''} readOnly className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg bg-gray-100 text-base" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Reason</label>
-              <textarea value={reason} onChange={e => setReason(e.target.value)} required className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base min-h-[100px]" placeholder="Enter your reason for borrowing..." />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form onSubmit={handleRequestSubmit} className="bg-white rounded-t-2xl sm:rounded-xl shadow-lg w-full max-w-md max-h-[95vh] sm:max-h-[90vh] flex flex-col">
+            {/* Scrollable Content */}
+            <div className="overflow-y-auto flex-1 p-5 sm:p-6 space-y-3 sm:space-y-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 sticky top-0 bg-white pb-2 -mt-1">Request Item</h2>
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
-                <input type="date" value={date} onChange={e => setDate(e.target.value)} required className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base" />
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Item</label>
+                <input type="text" value={requestItem?.name || ''} readOnly className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-300 rounded-lg bg-gray-100 text-sm sm:text-base" />
               </div>
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Return Date</label>
-                <input type="date" value={returnDate} onChange={e => setReturnDate(e.target.value)} required className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base" />
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Reason</label>
+                <textarea value={reason} onChange={e => setReason(e.target.value)} required className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base min-h-[80px] sm:min-h-[100px]" placeholder="Enter your reason for borrowing..." />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Start Date</label>
+                  <input type="date" value={date} onChange={e => setDate(e.target.value)} required className="w-full px-2 sm:px-3 py-2.5 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base" />
+                </div>
+                <div>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Return Date</label>
+                  <input type="date" value={returnDate} onChange={e => setReturnDate(e.target.value)} required className="w-full px-2 sm:px-3 py-2.5 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Start Time</label>
+                <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} required className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base" />
               </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
-              <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} required className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base" />
-            </div>
-            <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-3">
-              <button type="button" onClick={closeRequestForm} className="w-full sm:w-auto px-6 py-3 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors font-medium text-base min-h-[48px]">Cancel</button>
-              <button type="submit" style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }} className="w-full sm:w-auto px-6 py-3 rounded-lg hover:shadow-lg transition-all font-medium text-base min-h-[48px]">Submit Request</button>
+
+            {/* Sticky Buttons at Bottom */}
+            <div className="sticky bottom-0 bg-white border-t-2 border-gray-200 p-4 sm:p-5 flex flex-col sm:flex-row gap-3 rounded-b-2xl sm:rounded-b-xl">
+              <button type="button" onClick={closeRequestForm} className="w-full sm:w-auto sm:flex-1 px-6 py-3 rounded-lg bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition-colors font-medium text-sm sm:text-base min-h-[48px]">Cancel</button>
+              <button type="submit" style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }} className="w-full sm:w-auto sm:flex-1 px-6 py-3 rounded-lg hover:shadow-lg active:shadow-xl transition-all font-bold text-sm sm:text-base min-h-[48px]">Submit Request</button>
             </div>
           </form>
         </div>
