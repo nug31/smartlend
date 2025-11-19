@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Bell, Menu, X, User, Settings, LogOut, Package, Handshake } from 'lucide-react';
+import { Bell, Menu, X, User, Settings, LogOut, Package, Handshake, Home, FileText, Tag, Users } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useData } from '../../contexts/DataContext';
 
 interface HeaderProps {
   onMenuToggle: () => void;
   isMenuOpen: boolean;
+  activeTab: string;
+  onTabChange: (tab: string) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen }) => {
+export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen, activeTab, onTabChange }) => {
   const { user, logout, isAdmin } = useAuth();
   const { notifications, markNotificationRead } = useData();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -16,9 +18,30 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen }) => {
 
   const unreadNotifications = notifications.filter(n => !n.isRead);
 
+  // Create menu items for horizontal nav
+  const menuItems = [];
+  if (isAdmin && user?.role === 'admin') {
+    menuItems.push(
+      { id: 'dashboard', label: 'Dashboard', icon: Home },
+      { id: 'catalog', label: 'Catalog', icon: Package },
+      { id: 'admin-loans', label: 'Manage Loans', icon: FileText },
+      { id: 'admin-items', label: 'Manage Items', icon: Package },
+      { id: 'admin-categories', label: 'Categories', icon: Tag },
+      { id: 'admin-users', label: 'Users', icon: Users },
+      { id: 'settings', label: 'Settings', icon: Settings }
+    );
+  } else {
+    menuItems.push(
+      { id: 'dashboard', label: 'Dashboard', icon: Home },
+      { id: 'catalog', label: 'Catalog', icon: Package },
+      { id: 'my-loans', label: 'My Loans', icon: FileText }
+    );
+  }
+
   return (
     <header className="bg-gradient-to-r from-orange-500 to-orange-600 shadow-lg border-b border-orange-400 sticky top-0 z-50">
-      <div className="flex items-center justify-between px-6 py-4">
+      {/* Top row: Logo and user actions */}
+      <div className="flex items-center justify-between px-6 py-3 border-b border-orange-400/30">
         <div className="flex items-center space-x-4">
           <button
             onClick={onMenuToggle}
@@ -30,13 +53,13 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen }) => {
           <div className="flex items-center space-x-4">
             <div className="relative">
               {/* Logo */}
-              <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg border border-white/30">
-                <Handshake size={24} className="text-orange-100" />
+              <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg border border-white/30">
+                <Handshake size={20} className="text-orange-100" />
               </div>
             </div>
 
             <div className="flex flex-col">
-              <span className="font-bold text-xl text-orange-100 hidden sm:block leading-tight">
+              <span className="font-bold text-lg text-orange-100 hidden sm:block leading-tight">
                 SmartLend
               </span>
               <span className="text-xs text-orange-200 font-semibold hidden sm:block -mt-1 tracking-wide">
@@ -144,6 +167,30 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen }) => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Bottom row: Horizontal navigation menu (desktop only) */}
+      <div className="hidden lg:flex items-center px-6 py-2 space-x-1 overflow-x-auto">
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => onTabChange(item.id)}
+              className={`
+                flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 whitespace-nowrap
+                ${isActive
+                  ? 'bg-white/20 text-white font-semibold shadow-md'
+                  : 'text-orange-100 hover:bg-white/10'
+                }
+              `}
+            >
+              <Icon size={18} />
+              <span className="text-sm">{item.label}</span>
+            </button>
+          );
+        })}
       </div>
     </header>
   );

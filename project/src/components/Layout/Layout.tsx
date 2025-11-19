@@ -22,12 +22,15 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-amber-50 via-blue-50 to-red-50">
-      <Sidebar
-        activeTab={activeTab}
-        onTabChange={onTabChange}
-        isOpen={isSidebarOpen}
-        onClose={handleSidebarClose}
-      />
+      {/* Sidebar only for mobile */}
+      <div className="lg:hidden">
+        <Sidebar
+          activeTab={activeTab}
+          onTabChange={onTabChange}
+          isOpen={isSidebarOpen}
+          onClose={handleSidebarClose}
+        />
+      </div>
 
       {/* Enhanced overlay for mobile */}
       {isSidebarOpen && (
@@ -41,6 +44,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange
         <Header
           onMenuToggle={handleMenuToggle}
           isMenuOpen={isSidebarOpen}
+          activeTab={activeTab}
+          onTabChange={onTabChange}
         />
 
         <main className="flex-1 overflow-x-hidden overflow-y-auto pb-20 lg:pb-0">
