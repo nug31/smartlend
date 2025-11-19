@@ -261,11 +261,11 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
       )}
       {/* Mobile-optimized Request Form Modal with Sticky Buttons */}
       {showRequestForm && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black bg-opacity-50 p-0 sm:p-4">
-          <form onSubmit={handleRequestSubmit} className="bg-white rounded-t-2xl sm:rounded-xl shadow-lg w-full max-w-md max-h-[95vh] sm:max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black bg-opacity-50 p-0 sm:p-4 pb-0">
+          <form onSubmit={handleRequestSubmit} className="bg-white rounded-t-2xl sm:rounded-xl shadow-lg w-full max-w-md max-h-[85vh] sm:max-h-[90vh] mb-16 sm:mb-0 flex flex-col">
             {/* Scrollable Content */}
-            <div className="overflow-y-auto flex-1 p-5 sm:p-6 space-y-3 sm:space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 sticky top-0 bg-white pb-2 -mt-1">Request Item</h2>
+            <div className="overflow-y-auto flex-1 p-4 sm:p-6 space-y-3 sm:space-y-4">
+              <h2 className="text-lg sm:text-2xl font-bold text-gray-900 sticky top-0 bg-white pb-2 -mt-1 z-10">Request Item</h2>
 
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Item</label>
@@ -274,7 +274,7 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
 
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Reason</label>
-                <textarea value={reason} onChange={e => setReason(e.target.value)} required className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-300 rounded-lg text-sm sm:text-base min-h-[80px] sm:min-h-[100px]" placeholder="Enter your reason for borrowing..." />
+                <textarea value={reason} onChange={e => setReason(e.target.value)} required className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border-2 border-gray-300 rounded-lg text-sm sm:text-base min-h-[60px] sm:min-h-[80px] resize-none" placeholder="Enter your reason..." />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -294,10 +294,10 @@ export const ItemCatalog: React.FC<ItemCatalogProps> = ({ onTabChange }) => {
               </div>
             </div>
 
-            {/* Sticky Buttons at Bottom */}
-            <div className="sticky bottom-0 bg-white border-t-2 border-gray-200 p-4 sm:p-5 flex flex-col sm:flex-row gap-3 rounded-b-2xl sm:rounded-b-xl">
-              <button type="button" onClick={closeRequestForm} className="w-full sm:w-auto sm:flex-1 px-6 py-3 rounded-lg bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition-colors font-medium text-sm sm:text-base min-h-[48px]">Cancel</button>
-              <button type="submit" style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }} className="w-full sm:w-auto sm:flex-1 px-6 py-3 rounded-lg hover:shadow-lg active:shadow-xl transition-all font-bold text-sm sm:text-base min-h-[48px]">Submit Request</button>
+            {/* Sticky Buttons at Bottom - Above Bottom Nav */}
+            <div className="sticky bottom-0 bg-white border-t-2 border-gray-200 p-3 sm:p-5 flex gap-2 sm:gap-3 rounded-b-2xl sm:rounded-b-xl shadow-lg">
+              <button type="button" onClick={closeRequestForm} className="flex-1 px-4 py-3 rounded-lg bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition-colors font-medium text-sm sm:text-base min-h-[48px]">Cancel</button>
+              <button type="submit" style={{ backgroundColor: '#E9631A', color: '#FFFFFF' }} className="flex-1 px-4 py-3 rounded-lg hover:shadow-lg active:shadow-xl transition-all font-bold text-sm sm:text-base min-h-[48px]">Submit</button>
             </div>
           </form>
         </div>
