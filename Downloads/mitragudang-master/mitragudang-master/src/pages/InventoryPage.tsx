@@ -12,8 +12,6 @@ import {
   FileSpreadsheet,
   ListFilter,
   Search,
-  ArrowUpCircle,
-  ArrowDownCircle,
 } from "lucide-react";
 import InventoryList from "../components/inventory/InventoryList";
 import AddItemModal from "../components/inventory/AddItemModal";
@@ -21,7 +19,6 @@ import EditItemModal from "../components/inventory/EditItemModal";
 import ImportItemsModal from "../components/inventory/ImportItemsModal";
 import CategoryManagement from "../components/inventory/CategoryManagement";
 import BrowseItemsModal from "../components/inventory/BrowseItemsModal";
-import StockManagement from "../components/inventory/StockManagement";
 import Select from "../components/ui/Select";
 import Input from "../components/ui/Input";
 import { itemService } from "../services/itemService";
@@ -37,12 +34,10 @@ const InventoryPage: React.FC = () => {
   const [showImportModal, setShowImportModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showBrowseModal, setShowBrowseModal] = useState(false);
-  const [showStockModal, setShowStockModal] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [activeTab, setActiveTab] = useState<"inventory" | "stock">("inventory");
   const [categoryOptions, setCategoryOptions] = useState([
     { value: "all", label: "All Categories" },
     { value: "electronics", label: "Electronics" },
@@ -179,16 +174,13 @@ const InventoryPage: React.FC = () => {
     try {
       const updatedItem = await itemService.updateItem(id, updates);
       if (updatedItem) {
-        // Optimistically update the local item without forcing a full re-fetch
-        // This prevents a heavy re-render that can cause the page to jump to the top
-        // (e.g. when clicking + / - on many items in list view).
         setItems((prev) =>
           prev.map((item) => (item.id === id ? updatedItem : item))
         );
 
-        // Keep experience snappy by not immediately refetching everything.
-        // If you want to sync completely with server later, call fetchItems()
-        // on an interval or expose a manual Refresh action.
+        // Force refresh from server to ensure we have latest data
+        console.log("Item updated, refreshing all items from server...");
+        await fetchItems();
       } else {
         setError("Failed to update item");
       }
@@ -319,91 +311,54 @@ const InventoryPage: React.FC = () => {
         </Alert>
       )}
 
-      {/* Tab Navigation */}
-      <div className="mb-6 flex gap-2 border-b border-gray-200">
-        <button
-          onClick={() => setActiveTab("inventory")}
-          className={`px-4 py-3 font-medium transition-all ${
-            activeTab === "inventory"
-              ? "border-b-2 border-blue-600 text-blue-600"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
-        >
-          Inventory
-        </button>
-        <button
-          onClick={() => setActiveTab("stock")}
-          className={`px-4 py-3 font-medium transition-all flex items-center gap-2 ${
-            activeTab === "stock"
-              ? "border-b-2 border-blue-600 text-blue-600"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
-        >
-          <ArrowUpCircle className="h-4 w-4" />
-          <ArrowDownCircle className="h-4 w-4" />
-          Stock In/Out
-        </button>
-      </div>
+      <Card className="mb-6">
+        <CardContent className="p-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Input
+              placeholder="Search items..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="mb-0"
+            />
+            <Select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              options={categoryOptions}
+              className="mb-0"
+            />
+            <Select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              options={statusOptions}
+              className="mb-0"
+            />
+          </div>
 
-      {/* Inventory Tab */}
-      {activeTab === "inventory" && (
-        <>
-          <Card className="mb-6">
-            <CardContent className="p-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Input
-                  placeholder="Search items..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="mb-0"
-                />
-                <Select
-                  value={categoryFilter}
-                  onChange={(e) => setCategoryFilter(e.target.value)}
-                  options={categoryOptions}
-                  className="mb-0"
-                />
-                <Select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  options={statusOptions}
-                  className="mb-0"
-                />
-              </div>
+          <div className="flex justify-between items-center mt-4">
+            <div className="text-sm text-gray-600">
+              <Filter className="h-4 w-4 inline-block mr-1" />
+              <span>{filteredItems.length} items found</span>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={resetFilters}
+              icon={<RefreshCw className="h-4 w-4" />}
+            >
+              Reset Filters
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
-              <div className="flex justify-between items-center mt-4">
-                <div className="text-sm text-gray-600">
-                  <Filter className="h-4 w-4 inline-block mr-1" />
-                  <span>{filteredItems.length} items found</span>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={resetFilters}
-                  icon={<RefreshCw className="h-4 w-4" />}
-                >
-                  Reset Filters
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+      <InventoryList
+        items={filteredItems}
+        onUpdate={handleUpdateItem}
+        onDelete={handleDeleteItem}
+        onEdit={(item) => setEditingItem(item)}
+        isLoading={loading}
+      />
 
-          <InventoryList
-            items={filteredItems}
-            onUpdate={handleUpdateItem}
-            onDelete={handleDeleteItem}
-            onEdit={(item) => setEditingItem(item)}
-            isLoading={loading}
-          />
-        </>
-      )}
-
-      {/* Stock In/Out Tab */}
-      {activeTab === "stock" && (
-        <StockManagement />
-      )}
-
-      {/* Original modals and content kept below */}
       {showAddModal && (
         <AddItemModal
           onClose={() => setShowAddModal(false)}
