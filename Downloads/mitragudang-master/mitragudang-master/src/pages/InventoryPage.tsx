@@ -12,11 +12,13 @@ import {
   FileSpreadsheet,
   ListFilter,
   Search,
+  Download,
 } from "lucide-react";
 import InventoryList from "../components/inventory/InventoryList";
 import AddItemModal from "../components/inventory/AddItemModal";
 import EditItemModal from "../components/inventory/EditItemModal";
 import ImportItemsModal from "../components/inventory/ImportItemsModal";
+import ImportStockModal from "../components/inventory/ImportStockModal";
 import CategoryManagement from "../components/inventory/CategoryManagement";
 import BrowseItemsModal from "../components/inventory/BrowseItemsModal";
 import Select from "../components/ui/Select";
@@ -25,6 +27,7 @@ import { itemService } from "../services/itemService";
 import { categoryService } from "../services/categoryService";
 import { normalizeCategory, categoriesAreEqual } from "../utils/categoryUtils";
 import { API_BASE_URL } from "../config";
+import { downloadCSV } from "../utils/exporters";
 
 const InventoryPage: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -32,6 +35,7 @@ const InventoryPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showImportStockModal, setShowImportStockModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showBrowseModal, setShowBrowseModal] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
@@ -280,6 +284,37 @@ const InventoryPage: React.FC = () => {
               <span className="sm:hidden">Import</span>
             </Button>
             <Button
+              variant="outline"
+              onClick={() => {
+                // export current items snapshot
+                const rows = items.map((it) => ({
+                  id: it.id,
+                  name: it.name,
+                  category: it.category,
+                  quantity: it.quantity,
+                  minQuantity: it.minQuantity,
+                  status: it.status,
+                }));
+                downloadCSV(`inventory-snapshot-${new Date().toISOString()}.csv`, rows);
+              }}
+              icon={<Download className="h-4 w-4" />}
+              className="flex-shrink-0"
+              size="sm"
+            >
+              <span className="hidden sm:inline">Export Snapshot</span>
+              <span className="sm:hidden">Export</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setShowImportStockModal(true)}
+              icon={<FileSpreadsheet className="h-4 w-4" />}
+              className="flex-shrink-0"
+              size="sm"
+            >
+              <span className="hidden sm:inline">Import Stock Changes</span>
+              <span className="sm:hidden">Import Stock</span>
+            </Button>
+            <Button
               variant="secondary"
               onClick={() => setShowCategoryModal(true)}
               icon={<ListFilter className="h-4 w-4" />}
@@ -373,6 +408,20 @@ const InventoryPage: React.FC = () => {
           onImport={handleImportItems}
         />
       )}
+
+        {showImportStockModal && (
+          <ImportStockModal
+            onClose={() => setShowImportStockModal(false)}
+            items={items}
+            onImported={(log) => {
+              // After import, update local list with any updated items from server
+              // For simplicity re-fetch items to keep sync
+              fetchItems();
+              // Optionally, generate/export log or show toast
+              console.log("Stock import log:", log);
+            }}
+          />
+        )}
 
       {editingItem && (
         <EditItemModal
