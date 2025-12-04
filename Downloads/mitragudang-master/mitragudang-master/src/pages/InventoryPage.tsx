@@ -174,13 +174,14 @@ const InventoryPage: React.FC = () => {
     try {
       const updatedItem = await itemService.updateItem(id, updates);
       if (updatedItem) {
-        setItems((prev) =>
-          prev.map((item) => (item.id === id ? updatedItem : item))
-        );
+        // Optimistically update the local item without forcing a full re-fetch
+        // This prevents a heavy re-render that can cause the page to jump to the top
+        // (e.g. when clicking + / - on many items in list view).
+        setItems((prev) => prev.map((item) => (item.id === id ? updatedItem : item)));
 
-        // Force refresh from server to ensure we have latest data
-        console.log("Item updated, refreshing all items from server...");
-        await fetchItems();
+        // Keep experience snappy by not immediately refetching everything.
+        // If you want to sync completely with server later, call fetchItems()
+        // on an interval or expose a manual Refresh action.
       } else {
         setError("Failed to update item");
       }
