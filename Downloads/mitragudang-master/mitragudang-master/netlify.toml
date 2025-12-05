@@ -1,4 +1,8 @@
+# Netlify build configuration
+# This config should override any UI settings
 [build]
+  # No base directory - package.json is at repository root
+  base = ""
   command = "npm install && npm run build"
   publish = "dist"
   
