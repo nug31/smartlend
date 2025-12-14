@@ -191,12 +191,12 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen, active
               className={`
                 flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 whitespace-nowrap text-sm font-medium
                 ${isActive
-                  ? 'bg-white text-orange shadow-sm border border-orange/10'
+                  ? 'bg-orange text-white shadow-md shadow-orange/20'
                   : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100/50'
                 }
               `}
             >
-              <Icon size={16} className={isActive ? 'text-orange' : 'text-gray-400'} />
+              <Icon size={16} className={isActive ? 'text-white' : 'text-gray-400'} />
               <span>{item.label}</span>
             </button>
           );
