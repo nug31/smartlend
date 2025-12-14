@@ -1945,8 +1945,8 @@ app.get("/api/dashboard/stats", async (req, res) => {
           activity.status === 'approved' ? 'request_approved' :
             activity.status === 'denied' ? 'request_denied' : 'request_updated',
         description: `${activity.user_name || 'User'} ${activity.status === 'pending' ? 'created' :
-            activity.status === 'approved' ? 'approved' :
-              activity.status === 'denied' ? 'denied' : 'updated'
+          activity.status === 'approved' ? 'approved' :
+            activity.status === 'denied' ? 'denied' : 'updated'
           } request: ${activity.project_name}`,
         timestamp: activity.created_at || activity.updated_at,
         user: activity.user_name
@@ -2097,8 +2097,8 @@ app.get("/api/dashboard/activity", async (req, res) => {
         activity.status === 'approved' ? 'request_approved' :
           activity.status === 'denied' ? 'request_denied' : 'request_updated',
       description: `${activity.user_name || 'User'} ${activity.status === 'pending' ? 'created' :
-          activity.status === 'approved' ? 'approved' :
-            activity.status === 'denied' ? 'denied' : 'updated'
+        activity.status === 'approved' ? 'approved' :
+          activity.status === 'denied' ? 'denied' : 'updated'
         } request: ${activity.project_name}`,
       timestamp: activity.created_at || activity.updated_at,
       user: activity.user_name
@@ -2743,27 +2743,33 @@ app.get("/api/chat/sessions", async (req, res) => {
 });
 
 // Start the server
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`🤖 OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Configured' : 'Not configured'}`);
-});
+// Export app for serverless
+module.exports = app;
 
-// Handle server errors
-server.on('error', (error) => {
-  console.error('Server error:', error);
-  if (error.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is already in use`);
-  }
-});
+// Start the server only if run directly
+if (require.main === module) {
+  const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log(`🤖 OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Configured' : 'Not configured'}`);
+  });
 
-// Handle uncaught exceptions
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
-  process.exit(1);
-});
+  // Handle server errors
+  server.on('error', (error) => {
+    console.error('Server error:', error);
+    if (error.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use`);
+    }
+  });
 
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  process.exit(1);
-});
+  // Handle uncaught exceptions
+  process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+    process.exit(1);
+  });
+
+  // Handle unhandled promise rejections
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    process.exit(1);
+  });
+}

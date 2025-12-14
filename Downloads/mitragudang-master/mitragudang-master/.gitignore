@@ -62,3 +62,6 @@ ehthumbs.db
 migration-data/
 exports/
 uploads/
+
+server/.env.production
+.env.production
