@@ -1,0 +1,9 @@
+node_modules
+*.log
+.env
+.DS_Store
+*.sqlite
+*.db
+test-*.js
+test-*.json
+simple-server.js
