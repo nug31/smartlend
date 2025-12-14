@@ -191,7 +191,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen, active
               className={`
                 flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 whitespace-nowrap text-sm font-medium
                 ${isActive
-                  ? 'bg-orange text-white shadow-md shadow-orange/20'
+                  ? 'bg-[#E9631A] text-white shadow-md'
                   : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100/50'
                 }
               `}
