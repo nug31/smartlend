@@ -695,6 +695,7 @@ app.delete("/api/items/:id", async (req, res) => {
 
 // Requests API endpoints
 // Get all requests
+// Get all requests
 app.get("/api/requests", async (req, res) => {
   try {
     console.log("GET /api/requests - Fetching all requests");
@@ -705,25 +706,42 @@ app.get("/api/requests", async (req, res) => {
       ORDER BY r.created_at DESC
     `);
 
-    // Get items for each request
-    const requestsWithItems = await Promise.all(
-      requests.map(async (request) => {
-        const [items] = await pool.query(
-          `
-          SELECT ri.*, i.name, i.description, i.category
-          FROM request_items ri
-          JOIN items i ON ri.item_id = i.id
-          WHERE ri.request_id = ?
-        `,
-          [request.id]
-        );
+    if (requests.length === 0) {
+      return res.json([]);
+    }
 
-        return {
-          ...request,
-          items: items,
-        };
-      })
+    // Optimization: Fetch all items for these requests in one query
+    const requestIds = requests.map(r => r.id);
+
+    // Handle case where specific user might have existing requests but no items (edge case)
+    // or simply fetch all items that match any of the request IDs.
+    // Using IN clause for 2000+ IDs is generally okay in MySQL (max packet size allowing).
+    // If requestIds is huge, we might need to batch, but for <5000 it's usually fine.
+
+    const [allItems] = await pool.query(
+      `
+      SELECT ri.*, i.name, i.description, i.category
+      FROM request_items ri
+      JOIN items i ON ri.item_id = i.id
+      WHERE ri.request_id IN (?)
+      `,
+      [requestIds]
     );
+
+    // Group items by request_id in memory
+    const itemsByRequestId = {};
+    allItems.forEach(item => {
+      if (!itemsByRequestId[item.request_id]) {
+        itemsByRequestId[item.request_id] = [];
+      }
+      itemsByRequestId[item.request_id].push(item);
+    });
+
+    // Map items back to requests
+    const requestsWithItems = requests.map(request => ({
+      ...request,
+      items: itemsByRequestId[request.id] || []
+    }));
 
     res.json(requestsWithItems);
   } catch (error) {
@@ -736,6 +754,7 @@ app.get("/api/requests", async (req, res) => {
   }
 });
 
+// Get requests by user ID
 // Get requests by user ID
 app.get("/api/requests/user/:userId", async (req, res) => {
   try {
@@ -752,25 +771,34 @@ app.get("/api/requests/user/:userId", async (req, res) => {
       [userId]
     );
 
-    // Get items for each request
-    const requestsWithItems = await Promise.all(
-      requests.map(async (request) => {
-        const [items] = await pool.query(
-          `
-          SELECT ri.*, i.name, i.description, i.category
-          FROM request_items ri
-          JOIN items i ON ri.item_id = i.id
-          WHERE ri.request_id = ?
-        `,
-          [request.id]
-        );
+    if (requests.length === 0) {
+      return res.json([]);
+    }
 
-        return {
-          ...request,
-          items: items,
-        };
-      })
+    const requestIds = requests.map(r => r.id);
+
+    const [allItems] = await pool.query(
+      `
+      SELECT ri.*, i.name, i.description, i.category
+      FROM request_items ri
+      JOIN items i ON ri.item_id = i.id
+      WHERE ri.request_id IN (?)
+      `,
+      [requestIds]
     );
+
+    const itemsByRequestId = {};
+    allItems.forEach(item => {
+      if (!itemsByRequestId[item.request_id]) {
+        itemsByRequestId[item.request_id] = [];
+      }
+      itemsByRequestId[item.request_id].push(item);
+    });
+
+    const requestsWithItems = requests.map(request => ({
+      ...request,
+      items: itemsByRequestId[request.id] || []
+    }));
 
     res.json(requestsWithItems);
   } catch (error) {
