@@ -342,6 +342,234 @@
 }
 
 @layer utilities {
+  /* ===== LOGIN PAGE ANIMATIONS ===== */
+  
+  /* Floating Box Animation - different speeds for variety */
+  @keyframes float-box {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-20px) rotate(5deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(-3deg);
+    }
+    75% {
+      transform: translateY(-25px) rotate(3deg);
+    }
+  }
+
+  @keyframes float-box-slow {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg) scale(1);
+    }
+    50% {
+      transform: translateY(-30px) rotate(-5deg) scale(1.02);
+    }
+  }
+
+  @keyframes float-box-reverse {
+    0%, 100% {
+      transform: translateY(-20px) rotate(5deg);
+    }
+    50% {
+      transform: translateY(0) rotate(-5deg);
+    }
+  }
+
+  /* Card Entrance Animation */
+  @keyframes card-entrance {
+    0% {
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+      filter: blur(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  /* Input Focus Glow */
+  @keyframes input-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    50% {
+      box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.2);
+    }
+  }
+
+  /* Button Shine Effect */
+  @keyframes button-shine {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+
+  /* Success Checkmark Animation */
+  @keyframes success-checkmark {
+    0% {
+      stroke-dashoffset: 50;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes success-circle {
+    0% {
+      stroke-dashoffset: 240;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes success-scale {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* Background Gradient Animation */
+  @keyframes bg-gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Particle Float */
+  @keyframes particle-float {
+    0%, 100% {
+      transform: translateY(0) translateX(0) scale(1);
+      opacity: 0.6;
+    }
+    25% {
+      transform: translateY(-30px) translateX(10px) scale(1.1);
+      opacity: 0.8;
+    }
+    50% {
+      transform: translateY(-20px) translateX(-10px) scale(0.9);
+      opacity: 0.5;
+    }
+    75% {
+      transform: translateY(-40px) translateX(5px) scale(1.05);
+      opacity: 0.7;
+    }
+  }
+
+  /* Animation Classes */
+  .animate-float-box {
+    animation: float-box 6s ease-in-out infinite;
+  }
+
+  .animate-float-box-slow {
+    animation: float-box-slow 8s ease-in-out infinite;
+  }
+
+  .animate-float-box-reverse {
+    animation: float-box-reverse 7s ease-in-out infinite;
+  }
+
+  .animate-card-entrance {
+    animation: card-entrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .animate-input-glow {
+    animation: input-glow 2s ease-in-out infinite;
+  }
+
+  .animate-bg-gradient {
+    background-size: 200% 200%;
+    animation: bg-gradient-shift 15s ease infinite;
+  }
+
+  .animate-particle {
+    animation: particle-float 10s ease-in-out infinite;
+  }
+
+  .animate-success-scale {
+    animation: success-scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  /* Login Page Specific Styles */
+  .login-background {
+    @apply fixed inset-0 overflow-hidden;
+    background: linear-gradient(135deg, #0c1445 0%, #1e3a5f 25%, #0d4a6e 50%, #1a365d 75%, #0c1445 100%);
+    background-size: 200% 200%;
+    animation: bg-gradient-shift 20s ease infinite;
+  }
+
+  .login-floating-box {
+    @apply absolute rounded-2xl opacity-10;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+  }
+
+  .login-card {
+    @apply relative bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl overflow-hidden;
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .login-input {
+    @apply w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 transition-all duration-300;
+  }
+
+  .login-input:focus {
+    @apply outline-none border-blue-400/50 bg-white/15 ring-2 ring-blue-400/30;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+
+  .login-button {
+    @apply relative overflow-hidden w-full py-3 px-6 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-xl transition-all duration-300;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  }
+
+  .login-button:hover {
+    @apply from-blue-600 to-cyan-600;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .login-button:active {
+    transform: translateY(0);
+  }
+
+  .login-button::before {
+    content: '';
+    @apply absolute top-0 w-full h-full;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    left: -100%;
+  }
+
+  .login-button:hover::before {
+    animation: button-shine 0.6s ease-out;
+  }
+
   /* Netflix-style Splash Screen Animations */
   @keyframes fade-in-up {
     from {
