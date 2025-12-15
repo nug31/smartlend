@@ -78,6 +78,7 @@ class AuthService {
         },
         body: JSON.stringify({
           name: username,
+          username, // Add username field as backend expects it
           email,
           password,
           role: "user"
